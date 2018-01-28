@@ -1,3 +1,5 @@
+pub mod puzzle;
+
 #[cfg(test)]
 mod tests {
     #[test]
