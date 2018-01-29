@@ -19,13 +19,13 @@ impl IntoIterator for Template {
 }
 
 pub struct PieceIterator {
-    symmetry_index: u8,
+    symmetry_iterator: CubeSymmetryIterator,
     template: Template,
 }
 
 impl PieceIterator {
     pub fn new(template: Template) -> PieceIterator {
-        PieceIterator { symmetry_index: 0, template: template }
+        PieceIterator { symmetry_iterator: CubeSymmetryIterator::new(), template: template }
     }
 }
 
@@ -33,13 +33,91 @@ impl Iterator for PieceIterator {
     type Item = Piece;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.symmetry_index < 24 {
-            self.symmetry_index += 1;
+        let symmetry = self.symmetry_iterator.next();
+        if symmetry.is_some() {
             let piece = Piece::from(self.template.clone());
 
             Some(piece)
         } else {
             None
+        }
+    }
+}
+
+#[derive(Clone)]
+enum CubeSymmetry {
+    E0123,
+    E0132,
+    E0213,
+    E0231,
+    E0312,
+    E0321,
+
+    E1023,
+    E1032,
+    E1203,
+    E1230,
+    E1302,
+    E1320,
+
+    E2013,
+    E2031,
+    E2103,
+    E2130,
+    E2301,
+    E2310,
+
+    E3012,
+    E3021,
+    E3102,
+    E3120,
+    E3201,
+    E3210,
+}
+
+struct CubeSymmetryIterator {
+    item: Option<CubeSymmetry>,
+}
+
+impl CubeSymmetryIterator {
+    fn new() -> CubeSymmetryIterator {
+        CubeSymmetryIterator { item: Some(CubeSymmetry::E0123) }
+    }
+}
+
+impl Iterator for CubeSymmetryIterator {
+    type Item = CubeSymmetry;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        match self.item.clone() {
+            s @ Some(CubeSymmetry::E0123) => { self.item = Some(CubeSymmetry::E0132); s },
+            s @ Some(CubeSymmetry::E0132) => { self.item = Some(CubeSymmetry::E0213); s },
+            s @ Some(CubeSymmetry::E0213) => { self.item = Some(CubeSymmetry::E0231); s },
+            s @ Some(CubeSymmetry::E0231) => { self.item = Some(CubeSymmetry::E0312); s },
+            s @ Some(CubeSymmetry::E0312) => { self.item = Some(CubeSymmetry::E0321); s },
+            s @ Some(CubeSymmetry::E0321) => { self.item = Some(CubeSymmetry::E1023); s },
+
+            s @ Some(CubeSymmetry::E1023) => { self.item = Some(CubeSymmetry::E1032); s },
+            s @ Some(CubeSymmetry::E1032) => { self.item = Some(CubeSymmetry::E1203); s },
+            s @ Some(CubeSymmetry::E1203) => { self.item = Some(CubeSymmetry::E1230); s },
+            s @ Some(CubeSymmetry::E1230) => { self.item = Some(CubeSymmetry::E1302); s },
+            s @ Some(CubeSymmetry::E1302) => { self.item = Some(CubeSymmetry::E1320); s },
+            s @ Some(CubeSymmetry::E1320) => { self.item = Some(CubeSymmetry::E2013); s },
+
+            s @ Some(CubeSymmetry::E2013) => { self.item = Some(CubeSymmetry::E2031); s },
+            s @ Some(CubeSymmetry::E2031) => { self.item = Some(CubeSymmetry::E2103); s },
+            s @ Some(CubeSymmetry::E2103) => { self.item = Some(CubeSymmetry::E2130); s },
+            s @ Some(CubeSymmetry::E2130) => { self.item = Some(CubeSymmetry::E2301); s },
+            s @ Some(CubeSymmetry::E2301) => { self.item = Some(CubeSymmetry::E2310); s },
+            s @ Some(CubeSymmetry::E2310) => { self.item = Some(CubeSymmetry::E3012); s },
+
+            s @ Some(CubeSymmetry::E3012) => { self.item = Some(CubeSymmetry::E3021); s },
+            s @ Some(CubeSymmetry::E3021) => { self.item = Some(CubeSymmetry::E3102); s },
+            s @ Some(CubeSymmetry::E3102) => { self.item = Some(CubeSymmetry::E3120); s },
+            s @ Some(CubeSymmetry::E3120) => { self.item = Some(CubeSymmetry::E3201); s },
+            s @ Some(CubeSymmetry::E3201) => { self.item = Some(CubeSymmetry::E3210); s },
+            s @ Some(CubeSymmetry::E3210) => { self.item = None; s },
+            s @ None                      => { self.item = None; s },
         }
     }
 }
