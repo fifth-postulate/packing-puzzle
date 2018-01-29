@@ -33,14 +33,12 @@ impl Iterator for PieceIterator {
     type Item = Piece;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let symmetry = self.symmetry_iterator.next();
-        if symmetry.is_some() {
+        let symmetry_option = self.symmetry_iterator.next();
+        symmetry_option.map(|symmetry|{
             let piece = Piece::from(self.template.clone());
 
-            Some(piece)
-        } else {
-            None
-        }
+            piece
+        })
     }
 }
 
