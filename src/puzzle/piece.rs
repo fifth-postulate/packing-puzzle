@@ -120,6 +120,10 @@ impl Iterator for CubeSymmetryIterator {
     }
 }
 
+trait Transformable {
+    fn transform(&mut self, symmetry: &CubeSymmetry);
+}
+
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct Position {
     x: i8,
@@ -130,6 +134,37 @@ pub struct Position {
 impl Position {
     pub fn new(x: i8, y: i8, z: i8) -> Position {
         Position { x, y, z }
+    }
+}
+
+impl Transformable for Position {
+    fn transform(&mut self, symmetry: &CubeSymmetry) {
+        match *symmetry {
+            CubeSymmetry::E0123 => { self.x =  self.x; self.y =  self.y; self.z =  self.z; },
+            CubeSymmetry::E0132 => { self.x = -self.z; self.y = -self.y; self.z = -self.x; },
+            CubeSymmetry::E0213 => { self.x = -self.x; self.y = -self.z; self.z = -self.y; },
+            CubeSymmetry::E0231 => { self.x =  self.y; self.y =  self.z; self.z =  self.x; },
+            CubeSymmetry::E0312 => { self.x =  self.z; self.y =  self.x; self.z =  self.y; },
+            CubeSymmetry::E0321 => { self.x = -self.y; self.y = -self.x; self.z = -self.z; },
+            CubeSymmetry::E1023 => { self.x =  self.z; self.y = -self.y; self.z =  self.x; },
+            CubeSymmetry::E1032 => { self.x = -self.x; self.y =  self.y; self.z = -self.z; },
+            CubeSymmetry::E1203 => { self.x = -self.z; self.y = -self.x; self.z =  self.y; },
+            CubeSymmetry::E1230 => { self.x = -self.y; self.y =  self.x; self.z =  self.z; },
+            CubeSymmetry::E1302 => { self.x =  self.x; self.y =  self.z; self.z = -self.y; },
+            CubeSymmetry::E1320 => { self.x =  self.y; self.y = -self.z; self.z = -self.x; },
+            CubeSymmetry::E2013 => { self.x = -self.y; self.y =  self.z; self.z = -self.x; },
+            CubeSymmetry::E2031 => { self.x =  self.x; self.y = -self.z; self.z =  self.y; },
+            CubeSymmetry::E2103 => { self.x =  self.y; self.y =  self.x; self.z = -self.z; },
+            CubeSymmetry::E2130 => { self.x =  self.z; self.y = -self.x; self.z = -self.y; },
+            CubeSymmetry::E2301 => { self.x = -self.x; self.y = -self.y; self.z =  self.z; },
+            CubeSymmetry::E2310 => { self.x = -self.z; self.y =  self.y; self.z =  self.x; },
+            CubeSymmetry::E3012 => { self.x =  self.y; self.y = -self.x; self.z =  self.z; },
+            CubeSymmetry::E3021 => { self.x = -self.z; self.y =  self.x; self.z = -self.y; },
+            CubeSymmetry::E3102 => { self.x = -self.y; self.y = -self.z; self.z =  self.x; },
+            CubeSymmetry::E3120 => { self.x = -self.x; self.y =  self.z; self.z =  self.y; },
+            CubeSymmetry::E3201 => { self.x =  self.z; self.y =  self.y; self.z = -self.x; },
+            CubeSymmetry::E3210 => { self.x =  self.x; self.y = -self.y; self.z = -self.z; },
+         }
     }
 }
 
