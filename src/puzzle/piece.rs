@@ -177,6 +177,14 @@ impl From<Template> for Piece {
         Piece { positions : template.positions }
     }
 }
+
+impl Transformable for Piece {
+    fn transform(&mut self, symmetry: &CubeSymmetry) {
+        for position in self.positions.iter_mut() {
+            position.transform(symmetry);
+        }
+    }
+}
 #[cfg(test)]
 mod tests {
     use std::iter::Iterator;
