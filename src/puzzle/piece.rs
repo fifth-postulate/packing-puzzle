@@ -120,8 +120,19 @@ impl Iterator for CubeSymmetryIterator {
     }
 }
 
-trait Transformable {
+pub trait Transformable {
     fn transform(&mut self, symmetry: &CubeSymmetry);
+}
+
+#[derive(Debug, PartialEq, Eq, Hash)]
+pub struct Translation {
+    x: i8,
+    y: i8,
+    z: i8,
+}
+
+pub trait Translatable {
+    fn translate(&mut self, translation: &Translation);
 }
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
@@ -168,8 +179,22 @@ impl Transformable for Position {
     }
 }
 
+impl Translatable for Position {
+    fn translate(&mut self, translation: &Translation) {
+        self.x += translation.x;
+        self.y += translation.y;
+        self.z += translation.z;
+    }
+}
+
 pub struct Piece {
     positions: Vec<Position>,
+}
+
+impl Piece {
+    fn new(positions: Vec<Position>) -> Piece {
+        Piece { positions }
+    }
 }
 
 impl From<Template> for Piece {
@@ -185,6 +210,15 @@ impl Transformable for Piece {
         }
     }
 }
+
+impl Translatable for Piece {
+    fn translate(&mut self, translation: &Translation) {
+        for position in self.positions.iter_mut() {
+            position.translate(translation);
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use std::iter::Iterator;
@@ -224,5 +258,16 @@ mod tests {
         let iterator: PieceIterator = template.into_iter();
 
         assert_eq!(iterator.count(), 24);
+    }
+
+    #[test]
+    fn piece_should_translate() {
+        let piece = Piece::new(vec!(
+            Position::new(0, 0, 0),
+            Position::new(1, 0, 0),
+            Position::new(1, 1, 0),
+            Position::new(1, 1, 1),
+        ));
+
     }
 }
