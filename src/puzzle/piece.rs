@@ -43,7 +43,7 @@ impl Iterator for PieceIterator {
 }
 
 #[derive(Clone)]
-enum CubeSymmetry {
+pub enum CubeSymmetry {
     E0123,
     E0132,
     E0213,
@@ -131,6 +131,12 @@ pub struct Translation {
     z: i8,
 }
 
+impl Translation {
+    pub fn new(x: i8, y: i8, z: i8) -> Translation {
+        Translation { x, y, z }
+    }
+}
+
 pub trait Translatable {
     fn translate(&mut self, translation: &Translation);
 }
@@ -150,31 +156,32 @@ impl Position {
 
 impl Transformable for Position {
     fn transform(&mut self, symmetry: &CubeSymmetry) {
+        let (x, y, z) = (self.x, self.y, self.z);
         match *symmetry {
-            CubeSymmetry::E0123 => { self.x =  self.x; self.y =  self.y; self.z =  self.z; },
-            CubeSymmetry::E0132 => { self.x = -self.z; self.y = -self.y; self.z = -self.x; },
-            CubeSymmetry::E0213 => { self.x = -self.x; self.y = -self.z; self.z = -self.y; },
-            CubeSymmetry::E0231 => { self.x =  self.y; self.y =  self.z; self.z =  self.x; },
-            CubeSymmetry::E0312 => { self.x =  self.z; self.y =  self.x; self.z =  self.y; },
-            CubeSymmetry::E0321 => { self.x = -self.y; self.y = -self.x; self.z = -self.z; },
-            CubeSymmetry::E1023 => { self.x =  self.z; self.y = -self.y; self.z =  self.x; },
-            CubeSymmetry::E1032 => { self.x = -self.x; self.y =  self.y; self.z = -self.z; },
-            CubeSymmetry::E1203 => { self.x = -self.z; self.y = -self.x; self.z =  self.y; },
-            CubeSymmetry::E1230 => { self.x = -self.y; self.y =  self.x; self.z =  self.z; },
-            CubeSymmetry::E1302 => { self.x =  self.x; self.y =  self.z; self.z = -self.y; },
-            CubeSymmetry::E1320 => { self.x =  self.y; self.y = -self.z; self.z = -self.x; },
-            CubeSymmetry::E2013 => { self.x = -self.y; self.y =  self.z; self.z = -self.x; },
-            CubeSymmetry::E2031 => { self.x =  self.x; self.y = -self.z; self.z =  self.y; },
-            CubeSymmetry::E2103 => { self.x =  self.y; self.y =  self.x; self.z = -self.z; },
-            CubeSymmetry::E2130 => { self.x =  self.z; self.y = -self.x; self.z = -self.y; },
-            CubeSymmetry::E2301 => { self.x = -self.x; self.y = -self.y; self.z =  self.z; },
-            CubeSymmetry::E2310 => { self.x = -self.z; self.y =  self.y; self.z =  self.x; },
-            CubeSymmetry::E3012 => { self.x =  self.y; self.y = -self.x; self.z =  self.z; },
-            CubeSymmetry::E3021 => { self.x = -self.z; self.y =  self.x; self.z = -self.y; },
-            CubeSymmetry::E3102 => { self.x = -self.y; self.y = -self.z; self.z =  self.x; },
-            CubeSymmetry::E3120 => { self.x = -self.x; self.y =  self.z; self.z =  self.y; },
-            CubeSymmetry::E3201 => { self.x =  self.z; self.y =  self.y; self.z = -self.x; },
-            CubeSymmetry::E3210 => { self.x =  self.x; self.y = -self.y; self.z = -self.z; },
+            CubeSymmetry::E0123 => { self.x =  x; self.y =  y; self.z =  z; },
+            CubeSymmetry::E0132 => { self.x = -z; self.y = -y; self.z = -x; },
+            CubeSymmetry::E0213 => { self.x = -x; self.y = -z; self.z = -y; },
+            CubeSymmetry::E0231 => { self.x =  y; self.y =  z; self.z =  x; },
+            CubeSymmetry::E0312 => { self.x =  z; self.y =  x; self.z =  y; },
+            CubeSymmetry::E0321 => { self.x = -y; self.y = -x; self.z = -z; },
+            CubeSymmetry::E1023 => { self.x =  z; self.y = -y; self.z =  x; },
+            CubeSymmetry::E1032 => { self.x = -x; self.y =  y; self.z = -z; },
+            CubeSymmetry::E1203 => { self.x = -z; self.y = -x; self.z =  y; },
+            CubeSymmetry::E1230 => { self.x = -y; self.y =  x; self.z =  z; },
+            CubeSymmetry::E1302 => { self.x =  x; self.y =  z; self.z = -y; },
+            CubeSymmetry::E1320 => { self.x =  y; self.y = -z; self.z = -x; },
+            CubeSymmetry::E2013 => { self.x = -y; self.y =  z; self.z = -x; },
+            CubeSymmetry::E2031 => { self.x =  x; self.y = -z; self.z =  y; },
+            CubeSymmetry::E2103 => { self.x =  y; self.y =  x; self.z = -z; },
+            CubeSymmetry::E2130 => { self.x =  z; self.y = -x; self.z = -y; },
+            CubeSymmetry::E2301 => { self.x = -x; self.y = -y; self.z =  z; },
+            CubeSymmetry::E2310 => { self.x = -z; self.y =  y; self.z =  x; },
+            CubeSymmetry::E3012 => { self.x =  y; self.y = -x; self.z =  z; },
+            CubeSymmetry::E3021 => { self.x = -z; self.y =  x; self.z = -y; },
+            CubeSymmetry::E3102 => { self.x = -y; self.y = -z; self.z =  x; },
+            CubeSymmetry::E3120 => { self.x = -x; self.y =  z; self.z =  y; },
+            CubeSymmetry::E3201 => { self.x =  z; self.y =  y; self.z = -x; },
+            CubeSymmetry::E3210 => { self.x =  x; self.y = -y; self.z = -z; },
          }
     }
 }
@@ -187,6 +194,7 @@ impl Translatable for Position {
     }
 }
 
+#[derive(Debug, PartialEq, Eq, Hash)]
 pub struct Piece {
     positions: Vec<Position>,
 }
@@ -262,12 +270,40 @@ mod tests {
 
     #[test]
     fn piece_should_translate() {
-        let piece = Piece::new(vec!(
+        let mut piece = Piece::new(vec!(
+            Position::new(0, 0, 0),
+            Position::new(1, 0, 0),
+            Position::new(1, 1, 0),
+            Position::new(1, 1, 1),
+        ));
+        let translation = Translation::new(5, -3, 0);
+
+        piece.translate(&translation);
+
+        assert_eq!(piece, Piece::new(vec!(
+            Position::new(5, -3, 0),
+            Position::new(6, -3, 0),
+            Position::new(6, -2, 0),
+            Position::new(6, -2, 1),
+        )));
+    }
+
+    #[test]
+    fn piece_should_tranform() {
+        let mut piece = Piece::new(vec!(
             Position::new(0, 0, 0),
             Position::new(1, 0, 0),
             Position::new(1, 1, 0),
             Position::new(1, 1, 1),
         ));
 
+        piece.transform(&CubeSymmetry::E2103);
+
+        assert_eq!(piece, Piece::new(vec!(
+            Position::new(0, 0, 0),
+            Position::new(0, 1, 0),
+            Position::new(1, 1, 0),
+            Position::new(1, 1, -1),
+        )));
     }
 }
