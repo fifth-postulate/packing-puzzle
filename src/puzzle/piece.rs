@@ -35,7 +35,9 @@ impl Iterator for PieceIterator {
     fn next(&mut self) -> Option<Self::Item> {
         let symmetry_option = self.symmetry_iterator.next();
         symmetry_option.map(|symmetry|{
-            let piece = Piece::from(self.template.clone());
+            let mut piece = Piece::from(self.template.clone());
+
+            piece.transform(&symmetry);
 
             piece
         })
