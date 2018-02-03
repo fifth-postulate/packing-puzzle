@@ -35,7 +35,7 @@ fn main() {
 
     let mut solutions: Vec<Solution> = vec!();
     solve(target, bag, partial_solution, &mut |solution|{
-        println!("{:?}", solution);
+        println!("{}", solution);
         solutions.push(solution);
     });
 }

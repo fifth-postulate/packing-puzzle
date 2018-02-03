@@ -1,3 +1,5 @@
+use std::fmt::{Display, Formatter, Error};
+
 use super::piece::{MinimumPosition, Position, Translatable, Piece};
 use super::pieces::Bag;
 
@@ -51,6 +53,16 @@ impl Solution {
         pieces.push(piece.clone());
 
         Solution { pieces }
+    }
+}
+
+impl Display for Solution {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        write!(f, "<")?;
+        for piece in &self.pieces {
+            write!(f, "{}", piece)?;
+        }
+        write!(f, ">")
     }
 }
 

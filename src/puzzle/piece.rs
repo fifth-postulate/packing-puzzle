@@ -1,4 +1,5 @@
 use std::cmp::Ordering;
+use std::fmt::{Display, Formatter, Error};
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct Template {
@@ -166,6 +167,12 @@ impl Position {
     }
 }
 
+impl Display for Position {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        write!(f, "({}, {}, {})", self.x, self.y, self.z)
+    }
+}
+
 impl Ord for Position {
     fn cmp(&self, other: &Self) -> Ordering {
         match self.x.cmp(&other.x) {
@@ -244,6 +251,16 @@ impl Piece {
 
     pub fn contains(&self, position: &Position) -> bool {
         self.positions.contains(position)
+    }
+}
+
+impl Display for Piece {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        write!(f, "[")?;
+        for position in &self.positions {
+            write!(f, "{}", position)?
+        }
+        write!(f, "]")
     }
 }
 
