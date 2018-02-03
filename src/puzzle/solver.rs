@@ -36,6 +36,7 @@ impl MinimumPosition for Target {
     }
 }
 
+#[derive(Debug)]
 pub struct Solution {
     pieces: Vec<Piece>
 }
