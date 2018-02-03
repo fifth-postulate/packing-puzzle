@@ -6,7 +6,7 @@ use pack::puzzle::solver::{Target,Solution,solve};
 
 fn main() {
     let target = cube4x4x4();
-    let bag = Bag::packing_puzzle();
+    let bag = packing_puzzle();
     let partial_solution = Solution::empty();
 
     solve(target, bag, partial_solution, &mut |solution|{
@@ -81,4 +81,101 @@ fn cube4x4x4() -> Target {
         Position::new(2, 3, 3),
         Position::new(3, 3, 3),
     ))
+}
+
+pub fn packing_puzzle() -> Bag {
+    Bag { collection: vec!(
+        Template::new(vec!(
+            Position::new(0, 0, 0),
+            Position::new(1, 0, 0),
+            Position::new(1, 1, 0),
+            Position::new(1, 1, 1),
+        )),
+        Template::new(vec!(
+            Position::new(0, 0, 0),
+            Position::new(1, 0, 0),
+            Position::new(2, 0, 0),
+            Position::new(1, 1, 0),
+            Position::new(1, 0, 1),
+        )),
+        Template::new(vec!(
+            Position::new(0, 0, 0),
+            Position::new(1, 0, 0),
+            Position::new(2, 0, 0),
+            Position::new(2, 1, 0),
+            Position::new(0, 0, 1),
+        )),
+        Template::new(vec!(
+            Position::new(0, 0, 0),
+            Position::new(1, 0, 0),
+            Position::new(1, 1, 0),
+            Position::new(0, 0, 1),
+            Position::new(0, 0, 2),
+        )),
+        Template::new(vec!(
+            Position::new(0, 0, 0),
+            Position::new(1, 0, 0),
+            Position::new(1, 1, 0),
+            Position::new(2, 1, 0),
+            Position::new(2, 2, 0),
+        )),
+
+        Template::new(vec!(
+            Position::new(0, 0, 0),
+            Position::new(1, 0, 0),
+            Position::new(1, 1, 0),
+            Position::new(1, 2, 0),
+            Position::new(2, 1, 0),
+        )),
+        Template::new(vec!(
+            Position::new(0, 0, 0),
+            Position::new(1, 0, 0),
+            Position::new(2, 0, 0),
+            Position::new(1, 1, 0),
+            Position::new(1, 1, 1),
+        )),
+        Template::new(vec!(
+            Position::new(0, 0, 0),
+            Position::new(1, 0, 0),
+            Position::new(1, 1, 0),
+            Position::new(1, 1, 1),
+            Position::new(2, 1, 1),
+        )),
+        Template::new(vec!(
+            Position::new(0, 0, 0),
+            Position::new(1, 0, 0),
+            Position::new(1, 1, 0),
+            Position::new(2, 0, 0),
+            Position::new(0, 0, 1),
+        )),
+
+        Template::new(vec!(
+            Position::new(1, 0, 0),
+            Position::new(0, 1, 0),
+            Position::new(1, 1, 0),
+            Position::new(2, 1, 0),
+            Position::new(1, 2, 0),
+        )),
+        Template::new(vec!(
+            Position::new(0, 0, 0),
+            Position::new(1, 0, 0),
+            Position::new(1, 1, 0),
+            Position::new(2, 1, 0),
+            Position::new(0, 0, 1),
+        )),
+        Template::new(vec!(
+            Position::new(0, 0, 0),
+            Position::new(1, 0, 0),
+            Position::new(1, 1, 0),
+            Position::new(1, 2, 0),
+            Position::new(1, 0, 1),
+        )),
+        Template::new(vec!(
+            Position::new(0, 0, 0),
+            Position::new(1, 0, 0),
+            Position::new(1, 1, 0),
+            Position::new(2, 1, 0),
+            Position::new(1, 2, 0),
+        )),
+    ) }
 }
