@@ -1,6 +1,6 @@
 use super::piece::{Template, Position};
 
-#[derive(Debug, PartialEq, Eq, Hash)]
+#[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct Bag {
     collection: Vec<Template>,
 }

@@ -1,3 +1,5 @@
+use std::cmp::Ordering;
+
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct Template {
     positions: Vec<Position>,
@@ -154,6 +156,36 @@ impl Position {
     pub fn new(x: i8, y: i8, z: i8) -> Position {
         Position { x, y, z }
     }
+
+    pub fn to(&self, other: &Self) -> Translation {
+        Translation::new(
+            other.x - self.x,
+            other.y - self.y,
+            other.z - self.z
+        )
+    }
+}
+
+impl Ord for Position {
+    fn cmp(&self, other: &Self) -> Ordering {
+        match self.x.cmp(&other.x) {
+            Ordering::Equal => {
+                match self.y.cmp(&other.y) {
+                    Ordering::Equal => {
+                        self.z.cmp(&other.z)
+                    },
+                    y_ordering @ _ => y_ordering,
+                }
+            },
+            x_ordering @ _ => x_ordering,
+        }
+    }
+}
+
+impl PartialOrd for Position {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(&other))
+    }
 }
 
 impl Transformable for Position {
@@ -196,14 +228,22 @@ impl Translatable for Position {
     }
 }
 
-#[derive(Debug, PartialEq, Eq, Hash)]
+pub trait MinimumPosition {
+    fn minimum_position(&self) -> Option<Position>;
+}
+
+#[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct Piece {
-    positions: Vec<Position>,
+    pub positions: Vec<Position>,
 }
 
 impl Piece {
-    fn new(positions: Vec<Position>) -> Piece {
+    pub fn new(positions: Vec<Position>) -> Piece {
         Piece { positions }
+    }
+
+    pub fn contains(&self, position: &Position) -> bool {
+        self.positions.contains(position)
     }
 }
 
@@ -228,6 +268,13 @@ impl Translatable for Piece {
         }
     }
 }
+
+impl MinimumPosition for Piece {
+    fn minimum_position(&self) -> Option<Position> {
+        self.positions.iter().min().map(|position| position.clone())
+    }
+}
+
 
 #[cfg(test)]
 mod tests {
