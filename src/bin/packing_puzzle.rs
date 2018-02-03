@@ -10,7 +10,7 @@ fn main() {
     let partial_solution = Solution::empty();
 
     solve(target, bag, partial_solution, &mut |solution|{
-        println!("{:?}", solution);
+        println!("{}", solution);
     });
 }
 
