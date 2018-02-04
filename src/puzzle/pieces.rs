@@ -1,4 +1,4 @@
-use super::piece::{Template, Position};
+use super::piece::Template;
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct Bag {
