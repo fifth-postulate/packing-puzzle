@@ -1,12 +1,12 @@
 # Packing Puzzle
-Create a solver for a packing puzzle.
+Solver for a packing puzzle.
 
 ## Symmetries
 The group of symmetries of the cube is isomorphic to the permutation group on 4
 symbols. Below is an explicit isomorphism between S4 and a matrix group.
 
 | Permutation |  x |  y |  z | matrix                                             | 
-|-------------|-------------------------------------------------------------------|
+|-------------|----|----|----|----------------------------------------------------|
 | 0123        |  x |  y |  z | [ [  1,  0,  0 ], [  0,  1,  0 ], [  0,  0,  1 ] ] |
 | 0132        | -z | -y | -x | [ [  0,  0, -1 ], [  0, -1,  0 ], [ -1,  0,  0 ] ] |
 | 0213        | -x | -z | -y | [ [ -1,  0,  0 ], [  0,  0, -1 ], [  0, -1,  0 ] ] |
