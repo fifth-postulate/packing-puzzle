@@ -31,10 +31,8 @@ fn main() {
         )),
     ));
 
-    let partial_solution = Solution::empty();
-
     let mut solutions: Vec<Solution> = vec!();
-    solve(target, bag, partial_solution, &mut |solution|{
+    solve(target, bag, &mut |solution|{
         println!("{}", solution);
         solutions.push(solution);
     });

@@ -66,7 +66,12 @@ impl Display for Solution {
     }
 }
 
-pub fn solve<F>(target: Target, bag: Bag, partial_solution: Solution, when_solved: &mut F) where F: (FnMut(Solution)) + Sized {
+pub fn solve<F>(target: Target, bag: Bag, when_solved: &mut F) where F: (FnMut(Solution)) + Sized {
+    let partial_solution = Solution::empty();
+    solve_with(target, bag, partial_solution, when_solved)
+}
+
+pub fn solve_with<F>(target: Target, bag: Bag, partial_solution: Solution, when_solved: &mut F) where F: (FnMut(Solution)) + Sized {
     if target.is_empty() {
         when_solved(partial_solution)
     } else {
@@ -79,7 +84,7 @@ pub fn solve<F>(target: Target, bag: Bag, partial_solution: Solution, when_solve
                 if target.fits(&piece) {
                     let remaining_target = target.place(&piece);
                     let candidate_solution = partial_solution.record(&piece);
-                    solve(remaining_target, rest_of_bag.clone(), candidate_solution, when_solved)
+                    solve_with(remaining_target, rest_of_bag.clone(), candidate_solution, when_solved)
                 }
             }
         }

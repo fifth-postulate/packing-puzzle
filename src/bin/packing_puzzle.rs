@@ -2,14 +2,13 @@ extern crate pack;
 
 use pack::puzzle::piece::{Position, Template};
 use pack::puzzle::pieces::Bag;
-use pack::puzzle::solver::{Target,Solution,solve};
+use pack::puzzle::solver::{Target, solve};
 
 fn main() {
     let target = cube4x4x4();
     let bag = packing_puzzle();
-    let partial_solution = Solution::empty();
 
-    solve(target, bag, partial_solution, &mut |solution|{
+    solve(target, bag, &mut |solution|{
         println!("{}", solution);
     });
 }
