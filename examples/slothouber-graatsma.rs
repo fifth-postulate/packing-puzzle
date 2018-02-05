@@ -1,50 +1,17 @@
 extern crate pack;
 
-use pack::puzzle::solver::{Target, solve};
+use pack::puzzle::solver::solve;
 use pack::puzzle::piece::{Position, Template};
 use pack::puzzle::pieces::Bag;
+use pack::util::target::brick;
 
 fn main(){
-    let target = brick3x3x3();
+    let target = brick(3, 3, 3);
     let bag = slothouber_graatsma_bag();
 
     solve(target, bag, &mut |solution|{
         println!("{}", solution)
     });
-}
-
-fn brick3x3x3() -> Target {
-    Target::new(vec!(
-        Position::new(0, 0, 0),
-        Position::new(1, 0, 0),
-        Position::new(2, 0, 0),
-        Position::new(0, 1, 0),
-        Position::new(1, 1, 0),
-        Position::new(2, 1, 0),
-        Position::new(0, 2, 0),
-        Position::new(1, 2, 0),
-        Position::new(2, 2, 0),
-
-        Position::new(0, 0, 1),
-        Position::new(1, 0, 1),
-        Position::new(2, 0, 1),
-        Position::new(0, 1, 1),
-        Position::new(1, 1, 1),
-        Position::new(2, 1, 1),
-        Position::new(0, 2, 1),
-        Position::new(1, 2, 1),
-        Position::new(2, 2, 1),
-
-        Position::new(0, 0, 2),
-        Position::new(1, 0, 2),
-        Position::new(2, 0, 2),
-        Position::new(0, 1, 2),
-        Position::new(1, 1, 2),
-        Position::new(2, 1, 2),
-        Position::new(0, 2, 2),
-        Position::new(1, 2, 2),
-        Position::new(2, 2, 2),
-    ))
 }
 
 fn slothouber_graatsma_bag() -> Bag {

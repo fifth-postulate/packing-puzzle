@@ -2,19 +2,11 @@ extern crate pack;
 
 use pack::puzzle::piece::{Position, Template};
 use pack::puzzle::pieces::Bag;
-use pack::puzzle::solver::{Target,Solution,solve};
+use pack::puzzle::solver::{Solution, solve};
+use pack::util::target::brick;
 
 fn main() {
-    let target = Target::new(vec!(
-        Position::new(0, 0, 0),
-        Position::new(1, 0, 0),
-        Position::new(0, 1, 0),
-        Position::new(1, 1, 0),
-        Position::new(0, 0, 1),
-        Position::new(1, 0, 1),
-        Position::new(0, 1, 1),
-        Position::new(1, 1, 1),
-    ));
+    let target = brick(2, 2, 2);
 
     let bag = Bag::new(vec!(
         Template::new(vec!(

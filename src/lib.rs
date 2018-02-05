@@ -6,3 +6,4 @@
 /// > pack objects together into containers.
 
 pub mod puzzle;
+pub mod util;

@@ -62,6 +62,11 @@ fn brick3x3x3() -> Target {
 }
 ```
 
+Because bricks are often used as targets, there is a utility
+`pack::util::target::brick` function that does exactly that. The above code
+could be replaced with `brick(3, 3, 3)`.
+
+
 One other thing we need is a `pack::puzzle::pieces::Bag` of
 `pack::puzzle::piece:Template`s. A template is a shape that can be oriented in
 different ways by iterating over them. A bag is a container to hold templates.
@@ -129,7 +134,7 @@ Our `main` function could look like the following code.
 
 ```rust
 fn main(){
-    let target = brick3x3x3();
+    let target = brick(3, 3, 3);
     let bag = slothouber_graatsma_bag();
     let partial_solution = Solution::empty();
 
