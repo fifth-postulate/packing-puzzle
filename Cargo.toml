@@ -2,8 +2,12 @@
 name = "pack"
 version = "0.1.0"
 authors = ["Daan van Berkel <daan.v.berkel.1980@gmail.com>"]
-description = "Solver for a packing puzzle."
+description = "Solver for packing puzzle."
 license = "MIT"
 readme = "README.md"
+homepage = "https://github.com/fifth-postulate/packing-puzzle/wiki"
+repository = "https://github.com/fifth-postulate/packing-puzzle"
+keywords = ["puzzle", "solver", "packing"]
+categories = ["algorithms", "science"]
 
 [dependencies]
