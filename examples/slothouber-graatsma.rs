@@ -7,9 +7,8 @@ use pack::puzzle::pieces::Bag;
 fn main(){
     let target = brick3x3x3();
     let bag = slothouber_graatsma_bag();
-    let partial_solution = Solution::empty();
 
-    solve(target, bag, partial_solution, &mut |solution|{
+    solve(target, bag, &mut |solution|{
         println!("{}", solution)
     });
 }
