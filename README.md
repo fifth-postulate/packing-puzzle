@@ -146,5 +146,5 @@ see the [wiki][].
 
 [packing]: https://en.wikipedia.org/wiki/Packing_problems
 [puzzle]: https://en.wikipedia.org/wiki/Slothouber%E2%80%93Graatsma_puzzle
-[examples]: https://github.com/fifth-postulate/packing-puzzle/blob/master/examples/slothouber-graatsma.rs
+[example]: https://github.com/fifth-postulate/packing-puzzle/blob/master/examples/slothouber-graatsma.rs
 [wiki]: https://github.com/fifth-postulate/packing-puzzle/wiki
