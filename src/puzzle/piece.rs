@@ -223,16 +223,16 @@ impl Display for Position {
 
 impl Ord for Position {
     fn cmp(&self, other: &Self) -> Ordering {
-        match self.x.cmp(&other.x) {
+        match self.z.cmp(&other.z) {
             Ordering::Equal => {
                 match self.y.cmp(&other.y) {
                     Ordering::Equal => {
-                        self.z.cmp(&other.z)
+                        self.x.cmp(&other.x)
                     },
                     y_ordering @ _ => y_ordering,
                 }
             },
-            x_ordering @ _ => x_ordering,
+            z_ordering @ _ => z_ordering,
         }
     }
 }
