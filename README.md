@@ -1,4 +1,4 @@
-# Packing Puzzle
+# Packing Puzzle[![Build Status](https://travis-ci.org/fifth-postulate/packing-puzzle.svg?branch=master)](https://travis-ci.org/fifth-postulate/packing-puzzle)
 Solver for [packing problems][packing].
 
 ## installation
