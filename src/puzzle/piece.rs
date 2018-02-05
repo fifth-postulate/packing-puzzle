@@ -292,8 +292,7 @@ pub trait MinimumPosition {
 /// Entities that get packed.
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct Piece {
-    /// TODO remove public modifier
-    pub positions: Vec<Position>,
+    positions: Vec<Position>,
 }
 
 impl Piece {
@@ -305,6 +304,12 @@ impl Piece {
     /// Determine if a `Position` is contained in this `Piece`.
     pub fn contains(&self, position: &Position) -> bool {
         self.positions.contains(position)
+    }
+
+    /// Create an `Iterator` that iterates over all `Position`s.
+    pub fn iter(&self) -> PositionIterator {
+        let positions: Vec<Position> = self.positions.iter().cloned().collect();
+        PositionIterator::new(positions)
     }
 }
 
@@ -346,6 +351,32 @@ impl MinimumPosition for Piece {
     }
 }
 
+/// Iterate over the `Position`s of entities.
+pub struct PositionIterator {
+    index: usize,
+    positions: Vec<Position>,
+}
+
+impl PositionIterator {
+    /// Create a `PositionIterator` that iterates over the provided positions.
+    pub fn new(positions: Vec<Position>) -> PositionIterator {
+        PositionIterator { index: 0, positions }
+    }
+}
+
+impl Iterator for PositionIterator {
+    type Item = Position;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.index < self.positions.len() {
+            let position = self.positions[self.index].clone();
+            self.index += 1;
+            Some(position)
+        } else {
+            None
+        }
+    }
+}
 
 #[cfg(test)]
 mod tests {

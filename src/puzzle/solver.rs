@@ -22,8 +22,7 @@ impl Target {
 
     /// Determine if a `Piece` can be placed in the `Target`.
     pub fn fits(&self, piece: &Piece) -> bool {
-        /* TODO Create a position iterator */
-        piece.positions.iter().all(|position| self.collection.contains(position))
+        piece.iter().all(|position| self.collection.contains(&position))
     }
 
     /// Place a `Piece` in the `Target`. *Note* caller is responsible to check
