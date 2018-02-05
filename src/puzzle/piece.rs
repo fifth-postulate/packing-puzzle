@@ -10,12 +10,20 @@ use std::fmt::{Display, Formatter, Error};
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct Template {
     positions: Vec<Position>,
+    name: Option<String>
 }
 
 impl Template {
     /// Create a `Template` from a vector of `Position`s.
     pub fn new(positions: Vec<Position>) -> Template {
-        Template { positions }
+        Template { positions, name: None }
+    }
+
+    /// Create a named `Template` from this `Template`
+    pub fn with_name<S>(self, name: S) -> Template where S : Into<String> {
+        let name = Some(name.into());
+
+        Template { positions: self.positions, name }
     }
 }
 
@@ -293,12 +301,13 @@ pub trait MinimumPosition {
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct Piece {
     positions: Vec<Position>,
+    name: Option<String>
 }
 
 impl Piece {
     /// Create a new `Piece` from a collection of `Position`s.
     pub fn new(positions: Vec<Position>) -> Piece {
-        Piece { positions }
+        Piece { positions, name: None }
     }
 
     /// Determine if a `Position` is contained in this `Piece`.
@@ -316,6 +325,8 @@ impl Piece {
 impl Display for Piece {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         write!(f, "[")?;
+        let name = self.name.clone().unwrap_or(String::from(""));
+        write!(f, "{}", name)?;
         for position in &self.positions {
             write!(f, "{}", position)?
         }
@@ -325,7 +336,7 @@ impl Display for Piece {
 
 impl From<Template> for Piece {
     fn from(template: Template) -> Self {
-        Piece { positions : template.positions }
+        Piece { positions : template.positions, name : template.name }
     }
 }
 
