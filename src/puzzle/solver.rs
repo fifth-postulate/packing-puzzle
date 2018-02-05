@@ -16,7 +16,7 @@ impl Target {
     }
 
     /// Determine if there is nothing left to pack.
-    pub fn is_empty(&self) -> bool {
+    pub fn is_packed(&self) -> bool {
         self.collection.is_empty()
     }
 
@@ -89,7 +89,7 @@ pub fn solve<F>(target: Target, bag: Bag, when_solved: &mut F) where F: (FnMut(S
 
 /// Variant of the `solve` method that allows for a different starting point.
 pub fn solve_with<F>(target: Target, bag: Bag, partial_solution: Solution, when_solved: &mut F) where F: (FnMut(Solution)) + Sized {
-    if target.is_empty() {
+    if target.is_packed() {
         when_solved(partial_solution)
     } else {
         let open_position = target.minimum_position().unwrap();
