@@ -1,26 +1,33 @@
+//! Solver for packing problems.
 use std::fmt::{Display, Formatter, Error};
 
 use super::piece::{MinimumPosition, Position, Translatable, Piece};
 use super::pieces::Bag;
 
+/// Region to be packed.
 pub struct Target {
     collection: Vec<Position>,
 }
 
 impl Target {
+    /// Create a new `Target` from a collection of `Position`s.
     pub fn new(collection: Vec<Position>) -> Target {
         Target { collection }
     }
 
+    /// Determine if there is nothing left to pack.
     pub fn is_empty(&self) -> bool {
         self.collection.is_empty()
     }
 
+    /// Determine if a `Piece` can be placed in the `Target`.
     pub fn fits(&self, piece: &Piece) -> bool {
         /* TODO Create a position iterator */
         piece.positions.iter().all(|position| self.collection.contains(position))
     }
 
+    /// Place a `Piece` in the `Target`. *Note* caller is responsible to check
+    /// if the `Piece` will actually fit.
     pub fn place(&self, piece: &Piece) -> Target {
         let collection: Vec<Position> = self.collection
             .iter()
@@ -38,16 +45,22 @@ impl MinimumPosition for Target {
     }
 }
 
+/// (Partial) solution of a packing problem. Piece at their correct location are listed.
 #[derive(Debug)]
 pub struct Solution {
     pieces: Vec<Piece>
 }
 
 impl Solution {
+    /// Empty solution. Serves as a starting point for the `solve` method.
     pub fn empty() -> Solution {
         Solution { pieces: vec!() }
     }
 
+    /// Record a `Piece` as part of the `Solution`.
+    ///
+    /// Returns a new `Solutions` with the `Piece` added. *Note* the caller is
+    /// responsible for checking if the `Piece` actually fits in the `Target`.
     pub fn record(&self, piece: &Piece) -> Solution {
         let mut pieces: Vec<Piece> = self.pieces.iter().cloned().collect();
         pieces.push(piece.clone());
@@ -66,11 +79,15 @@ impl Display for Solution {
     }
 }
 
+/// Attempt to pack all the `Piece`s in the `Bag` into the `Target` region. When
+/// a solution is found, the `when_solved` callback is called with that solution.
 pub fn solve<F>(target: Target, bag: Bag, when_solved: &mut F) where F: (FnMut(Solution)) + Sized {
     let partial_solution = Solution::empty();
     solve_with(target, bag, partial_solution, when_solved)
 }
 
+
+/// Variant of the `solve` method that allows for a different starting point.
 pub fn solve_with<F>(target: Target, bag: Bag, partial_solution: Solution, when_solved: &mut F) where F: (FnMut(Solution)) + Sized {
     if target.is_empty() {
         when_solved(partial_solution)

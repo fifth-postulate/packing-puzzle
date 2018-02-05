@@ -1,11 +1,16 @@
+//! Containers that can dispense `Template`s.
+
 use super::piece::Template;
 
+/// A container for `Template`s. Iterating over a `Bag` provides access to a
+/// tuple of a `Template` and the rest of the `Bag`.
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct Bag {
     collection: Vec<Template>,
 }
 
 impl Bag {
+    /// Create a `Bag` from a collection of Templates
     pub fn new(collection: Vec<Template>) -> Self {
         Self { collection }
     }
@@ -20,6 +25,8 @@ impl IntoIterator for Bag {
     }
 }
 
+
+/// Iterator over tuples of `Template`s and rest of `Bag`s.
 pub struct BagSelectionIterator {
     collection: Vec<Template>,
     index: usize,
