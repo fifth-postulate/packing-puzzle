@@ -16,7 +16,7 @@ The [Slohouber-Graatsma puzzle][puzzle] asks for
 
 We are going to solve it with the `pack` library.
 
-First announce the use of the external crate.
+First we announce the use of the external crate.
 
 ```rust
 extern crate pack;
@@ -121,13 +121,6 @@ fn slothouber_graatsma_bag() -> Bag {
 }
 ```
 
-The last thing we need is a `pack::puzzle::solver::Solution`. The reason is that
-our `pack::puzzle::solver::solve` function uses recursion and we need to start somewhere.
-
-```rust
-let partial_solution = Solution::empty();
-```
-
 Finally we need to tell the `solve` function what to do when they find a
 solution. This can be done by passing a clojure. For this example we will just
 print the solution.
@@ -146,8 +139,8 @@ fn main(){
 }
 ```
 
-Running it will print a solution to the Slothouber-Graatsma puzzle. The full
-source for this example can be found in
+Running it will *eventually* print a solution to the Slothouber-Graatsma puzzle.
+The full source for this example can be found in
 [examples/slothouber-graatsma.rs][example]. For a more extensive documentation
 see the [wiki][].
 
