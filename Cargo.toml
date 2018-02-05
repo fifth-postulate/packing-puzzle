@@ -10,4 +10,8 @@ repository = "https://github.com/fifth-postulate/packing-puzzle"
 keywords = ["puzzle", "solver", "packing"]
 categories = ["algorithms", "science"]
 
+[badges]
+travis-ci = { repository = "fifth-postulate/packing-puzzle" branch = "master" }
+coveralls = { repository = "fifth-postulate/packing-puzzle", branch = "master", service = "github" }
+
 [dependencies]
