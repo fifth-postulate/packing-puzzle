@@ -1,6 +1,6 @@
 extern crate pack;
 
-use pack::puzzle::solver::{Target, Solution, solve};
+use pack::puzzle::solver::{Target, solve};
 use pack::puzzle::piece::{Position, Template};
 use pack::puzzle::pieces::Bag;
 
