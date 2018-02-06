@@ -149,7 +149,12 @@ The full source for this example can be found in
 [examples/slothouber-graatsma.rs][example]. For a more extensive documentation
 see the [wiki][].
 
+## Development
+If you are interested in contributing to this library please read
+[CONTRIBUTING.md][contributing].
+
 [packing]: https://en.wikipedia.org/wiki/Packing_problems
 [puzzle]: https://en.wikipedia.org/wiki/Slothouber%E2%80%93Graatsma_puzzle
-[example]: https://github.com/fifth-postulate/packing-puzzle/blob/master/examples/slothouber-graatsma.rs
+[example]: examples/slothouber-graatsma.rs
 [wiki]: https://github.com/fifth-postulate/packing-puzzle/wiki
+[contributing]: CONTRIBUTING.md
