@@ -41,7 +41,7 @@ impl Target {
 
 impl MinimumPosition for Target {
     fn minimum_position(&self) -> Option<Position> {
-        self.collection.iter().min().map(|position| position.clone())
+        self.collection.iter().min().cloned()
     }
 }
 
@@ -62,7 +62,7 @@ impl Solution {
     /// Returns a new `Solutions` with the `Piece` added. *Note* the caller is
     /// responsible for checking if the `Piece` actually fits in the `Target`.
     pub fn record(&self, piece: &Piece) -> Solution {
-        let mut pieces: Vec<Piece> = self.pieces.iter().cloned().collect();
+        let mut pieces: Vec<Piece> = self.pieces.to_vec();
         pieces.push(piece.clone());
 
         Solution { pieces }
@@ -81,14 +81,14 @@ impl Display for Solution {
 
 /// Attempt to pack all the `Piece`s in the `Bag` into the `Target` region. When
 /// a solution is found, the `when_solved` callback is called with that solution.
-pub fn solve<F>(target: Target, bag: Bag, when_solved: &mut F) where F: (FnMut(Solution)) + Sized {
+pub fn solve<F>(target: &Target, bag: Bag, when_solved: &mut F) where F: (FnMut(Solution)) + Sized {
     let partial_solution = Solution::empty();
     solve_with(target, bag, partial_solution, when_solved)
 }
 
 
 /// Variant of the `solve` method that allows for a different starting point.
-pub fn solve_with<F>(target: Target, bag: Bag, partial_solution: Solution, when_solved: &mut F) where F: (FnMut(Solution)) + Sized {
+pub fn solve_with<F>(target: &Target, bag: Bag, partial_solution: Solution, when_solved: &mut F) where F: (FnMut(Solution)) + Sized {
     if target.is_packed() {
         when_solved(partial_solution)
     } else {
@@ -101,7 +101,7 @@ pub fn solve_with<F>(target: Target, bag: Bag, partial_solution: Solution, when_
                 if target.fits(&piece) {
                     let remaining_target = target.place(&piece);
                     let candidate_solution = partial_solution.record(&piece);
-                    solve_with(remaining_target, rest_of_bag.clone(), candidate_solution, when_solved)
+                    solve_with(&remaining_target, rest_of_bag.clone(), candidate_solution, when_solved)
                 }
             }
         }
@@ -166,6 +166,6 @@ mod tests {
         ));
 
         let mut solutions: Vec<Solution> = vec!();
-        solve(target, bag, &mut |solution|{ solutions.push(solution)});
+        solve(&target, bag, &mut |solution|{ solutions.push(solution)});
         assert_eq!(solutions.len(), 72);
     }}

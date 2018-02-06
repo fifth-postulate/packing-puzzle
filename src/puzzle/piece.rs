@@ -166,8 +166,7 @@ impl Iterator for CubeSymmetryIterator {
             s @ Some(CubeSymmetry::E3102) => { self.item = Some(CubeSymmetry::E3120); s },
             s @ Some(CubeSymmetry::E3120) => { self.item = Some(CubeSymmetry::E3201); s },
             s @ Some(CubeSymmetry::E3201) => { self.item = Some(CubeSymmetry::E3210); s },
-            s @ Some(CubeSymmetry::E3210) => { self.item = None; s },
-            s @ None                      => { self.item = None; s },
+            s @ Some(CubeSymmetry::E3210) | s @ None => { self.item = None; s },
         }
     }
 }
@@ -237,17 +236,17 @@ impl Ord for Position {
                     Ordering::Equal => {
                         self.x.cmp(&other.x)
                     },
-                    y_ordering @ _ => y_ordering,
+                    y_ordering => y_ordering,
                 }
             },
-            z_ordering @ _ => z_ordering,
+            z_ordering => z_ordering,
         }
     }
 }
 
 impl PartialOrd for Position {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(&other))
+        Some(self.cmp(other))
     }
 }
 
@@ -317,7 +316,7 @@ impl Piece {
 
     /// Create an `Iterator` that iterates over all `Position`s.
     pub fn iter(&self) -> PositionIterator {
-        let positions: Vec<Position> = self.positions.iter().cloned().collect();
+        let positions: Vec<Position> = self.positions.to_vec();
         PositionIterator::new(positions)
     }
 }
@@ -325,7 +324,7 @@ impl Piece {
 impl Display for Piece {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         write!(f, "[")?;
-        let name = self.name.clone().unwrap_or(String::from(""));
+        let name = self.name.clone().unwrap_or_else(|| String::from(""));
         write!(f, "{}", name)?;
         for position in &self.positions {
             write!(f, "{}", position)?
@@ -342,7 +341,7 @@ impl From<Template> for Piece {
 
 impl Transformable for Piece {
     fn transform(&mut self, symmetry: &CubeSymmetry) {
-        for position in self.positions.iter_mut() {
+        for position in &mut self.positions {
             position.transform(symmetry);
         }
     }
@@ -350,7 +349,7 @@ impl Transformable for Piece {
 
 impl Translatable for Piece {
     fn translate(&mut self, translation: &Translation) {
-        for position in self.positions.iter_mut() {
+        for position in &mut self.positions {
             position.translate(translation);
         }
     }
@@ -358,7 +357,7 @@ impl Translatable for Piece {
 
 impl MinimumPosition for Piece {
     fn minimum_position(&self) -> Option<Position> {
-        self.positions.iter().min().map(|position| position.clone())
+        self.positions.iter().min().cloned()
     }
 }
 

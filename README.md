@@ -138,7 +138,7 @@ fn main(){
     let bag = slothouber_graatsma_bag();
     let partial_solution = Solution::empty();
 
-    solve(target, bag, partial_solution, &mut |solution|{
+    solve(&target, bag, partial_solution, &mut |solution|{
         println!("{}", solution)
     });
 }

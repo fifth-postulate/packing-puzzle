@@ -9,7 +9,7 @@ fn main() {
     let target = brick(4, 4, 4);
     let bag = packing_puzzle();
 
-    solve(target, bag, &mut |solution|{
+    solve(&target, bag, &mut |solution|{
         println!("{}", solution);
     });
 }

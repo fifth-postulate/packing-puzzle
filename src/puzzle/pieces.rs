@@ -43,7 +43,7 @@ impl Iterator for BagSelectionIterator {
 
     fn next(&mut self) -> Option<(Template, Bag)> {
         if self.index < self.collection.len() {
-            let mut collection: Vec<Template> = self.collection.iter().cloned().collect();
+            let mut collection: Vec<Template> = self.collection.to_vec();
             let template = collection.swap_remove(self.index);
             self.index += 1;
             Some((template.clone(), Bag::new(collection)))

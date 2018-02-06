@@ -9,7 +9,7 @@ fn main(){
     let target = brick(3, 3, 3);
     let bag = slothouber_graatsma_bag();
 
-    solve(target, bag, &mut |solution|{
+    solve(&target, bag, &mut |solution|{
         println!("{}", solution)
     });
 }

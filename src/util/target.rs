@@ -1,4 +1,4 @@
-/// Utilities for creating `Target`s.
+//! Utilities for creating `Target`s.
 
 use super::super::puzzle::solver::Target;
 use super::super::puzzle::piece::Position;
