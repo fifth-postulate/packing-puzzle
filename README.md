@@ -153,8 +153,16 @@ see the [wiki][].
 If you are interested in contributing to this library please read
 [CONTRIBUTING.md][contributing].
 
+
+### Running clippy
+Follow the installation instruction for [clippy][] and run the following command.
+```sh
+cargo +nightly clippy
+```
+
 [packing]: https://en.wikipedia.org/wiki/Packing_problems
 [puzzle]: https://en.wikipedia.org/wiki/Slothouber%E2%80%93Graatsma_puzzle
 [example]: examples/slothouber-graatsma.rs
 [wiki]: https://github.com/fifth-postulate/packing-puzzle/wiki
 [contributing]: CONTRIBUTING.md
+[clippy]: https://github.com/rust-lang-nursery/rust-clippy
