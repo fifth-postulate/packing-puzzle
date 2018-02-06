@@ -203,15 +203,13 @@ pub trait Transformable {
 /// Entities can be translated through space. This struct determines how.
 #[derive(Debug, PartialEq, Eq, Hash)]
 pub struct Translation {
-    x: i8,
-    y: i8,
-    z: i8,
+    delta : (i8, i8, i8),
 }
 
 impl Translation {
     /// Create a Translation by stating how to move along each coordinate.
     pub fn new(x: i8, y: i8, z: i8) -> Translation {
-        Translation { x, y, z }
+        Translation { delta: (x, y, z) }
     }
 }
 
@@ -307,9 +305,9 @@ impl Transformable for Position {
 
 impl Translatable for Position {
     fn translate(&mut self, translation: &Translation) {
-        self.x += translation.x;
-        self.y += translation.y;
-        self.z += translation.z;
+        self.x += translation.delta.0;
+        self.y += translation.delta.1;
+        self.z += translation.delta.2;
     }
 }
 
