@@ -165,10 +165,7 @@ mod tests {
             )),
         ));
 
-        let partial_solution = Solution::empty();
-
         let mut solutions: Vec<Solution> = vec!();
-        solve_with(target, bag, partial_solution, &mut |solution|{ solutions.push(solution)});
+        solve(target, bag, &mut |solution|{ solutions.push(solution)});
         assert_eq!(solutions.len(), 72);
-    }
-}
+    }}
