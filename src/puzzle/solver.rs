@@ -5,6 +5,7 @@ use super::piece::{MinimumPosition, Position, Translatable, Piece};
 use super::pieces::Bag;
 
 /// Region to be packed.
+#[derive(Debug, PartialEq, Eq, Hash)]
 pub struct Target {
     collection: Vec<Position>,
 }
