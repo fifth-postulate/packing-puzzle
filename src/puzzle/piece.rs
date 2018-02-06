@@ -235,7 +235,7 @@ impl Position {
         Position { x, y, z }
     }
 
-    /// Apply translation to move a point to an other.
+    /// Return a translation to move a point to an other.
     pub fn to(&self, other: &Self) -> Translation {
         Translation::new(
             other.x - self.x,
