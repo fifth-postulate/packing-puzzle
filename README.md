@@ -1,4 +1,4 @@
-# Packing Puzzle[![Build Status](https://travis-ci.org/fifth-postulate/packing-puzzle.svg?branch=master)](https://travis-ci.org/fifth-postulate/packing-puzzle)[![Coverage Status](https://coveralls.io/repos/github/fifth-postulate/packing-puzzle/badge.svg?branch=master)](https://coveralls.io/github/fifth-postulate/packing-puzzle?branch=master)
+# Packing Puzzle[![Build Status](https://travis-ci.org/fifth-postulate/packing-puzzle.svg?branch=master)](https://travis-ci.org/fifth-postulate/packing-puzzle)[![Coverage Status](https://coveralls.io/repos/github/fifth-postulate/packing-puzzle/badge.svg?branch=master)](https://coveralls.io/github/fifth-postulate/packing-puzzle?branch=master)[![pack on crates.io](https://img.shields.io/crates/v/pack.svg)](https://crates.io/crates/pack)
 Solver for [packing problems][packing].
 
 ## installation
