@@ -145,7 +145,7 @@ fn main(){
 }
 ```
 
-Running it will *eventually* print a solution to the Slothouber-Graatsma puzzle.
+Running it will print a solution to the Slothouber-Graatsma puzzle.
 The full source for this example can be found in
 [examples/slothouber-graatsma.rs][example]. For a more extensive documentation
 see the [wiki][].
