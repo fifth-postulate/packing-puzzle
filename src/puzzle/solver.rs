@@ -110,6 +110,7 @@ pub fn solve_with<F>(target: &Target, bag: Bag, partial_solution: Solution, when
 
 #[cfg(test)]
 mod tests {
+    use std::fmt::Write;
     use super::super::piece::{Position, Piece, Template};
     use super::super::pieces::Bag;
     use super::*;
@@ -168,4 +169,30 @@ mod tests {
         let mut solutions: Vec<Solution> = vec!();
         solve(&target, bag, &mut |solution|{ solutions.push(solution)});
         assert_eq!(solutions.len(), 8);
-    }}
+    }
+
+    #[test]
+    fn solutions_should_display_nicely() {
+        let solution =
+            Solution::empty()
+            .record(
+                &Piece::new(vec!(
+                    Position::new(0, 0, 0),
+                    Position::new(1, 0, 0),
+                    Position::new(0, 1, 0),
+                    Position::new(0, 0, 1),
+                )))
+            .record(
+                &Piece::new(vec!(
+                    Position::new(1, 1, 1),
+                    Position::new(0, 1, 1),
+                    Position::new(1, 0, 1),
+                    Position::new(1, 1, 0),
+                )));
+
+        let mut output: String = String::new();
+        write!(&mut output, "{}", solution).expect("to cleanly write solution");
+
+        assert_eq!(output, String::from("<[(0, 0, 0)(1, 0, 0)(0, 1, 0)(0, 0, 1)][(1, 1, 0)(1, 0, 1)(0, 1, 1)(1, 1, 1)]>"));
+    }
+}
