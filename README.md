@@ -138,9 +138,8 @@ Our `main` function could look like the following code.
 fn main(){
     let target = brick(3, 3, 3);
     let bag = slothouber_graatsma_bag();
-    let partial_solution = Solution::empty();
 
-    solve(&target, bag, partial_solution, &mut |solution|{
+    solve(&target, bag, &mut |solution|{
         println!("{}", solution)
     });
 }
