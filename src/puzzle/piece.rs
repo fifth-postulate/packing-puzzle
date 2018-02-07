@@ -41,13 +41,18 @@ impl IntoIterator for Template {
 /// from a `Template`
 pub struct PieceIterator {
     symmetry_iterator: CubeSymmetryIterator,
+    seen_pieces: Vec<Piece>,
     template: Template,
 }
 
 impl PieceIterator {
     /// Creates a `PieceIterator` for the `Template` that is passed as an argument
     pub fn new(template: Template) -> PieceIterator {
-        PieceIterator { symmetry_iterator: CubeSymmetryIterator::new(), template: template }
+        PieceIterator {
+            symmetry_iterator: CubeSymmetryIterator::new(),
+            seen_pieces: vec!(),
+            template: template
+        }
     }
 }
 
@@ -55,14 +60,32 @@ impl Iterator for PieceIterator {
     type Item = Piece;
 
     fn next(&mut self) -> Option<Self::Item> {
-        let symmetry_option = self.symmetry_iterator.next();
-        symmetry_option.map(|symmetry|{
-            let mut piece = Piece::from(self.template.clone());
+        let mut symmetry_option = self.symmetry_iterator.next();
+        while symmetry_option.is_some() {
+            let piece_option = symmetry_option.map(|symmetry|{
+                let mut piece = Piece::from(self.template.clone());
 
-            piece.transform(&symmetry);
+                piece.transform(&symmetry);
+                let minimum_position = piece.minimum_position();
+                let translation = minimum_position.unwrap().to(&Position::new(0, 0, 0));
+                piece.translate(&translation);
 
-            piece
-        })
+                piece
+            });
+
+            if piece_option.is_some() {
+                let piece = piece_option.unwrap();
+                let clone = piece.clone();
+                if !self.seen_pieces.contains(&clone) {
+                    self.seen_pieces.push(clone);
+
+                    return Some(piece)
+                }
+            }
+
+            symmetry_option = self.symmetry_iterator.next();
+        }
+        None
     }
 }
 
@@ -305,7 +328,8 @@ pub struct Piece {
 
 impl Piece {
     /// Create a new `Piece` from a collection of `Position`s.
-    pub fn new(positions: Vec<Position>) -> Piece {
+    pub fn new(mut positions: Vec<Position>) -> Piece {
+        positions.sort();
         Piece { positions, name: None }
     }
 
@@ -344,6 +368,7 @@ impl Transformable for Piece {
         for position in &mut self.positions {
             position.transform(symmetry);
         }
+        self.positions.sort()
     }
 }
 
@@ -416,17 +441,33 @@ mod tests {
     }
 
     #[test]
-    fn templates_should_return_24_pieces() {
+    fn templates_should_return_24_pieces_unsymmetric_templates() {
         let template = Template::new(vec!(
             Position::new(0, 0, 0),
             Position::new(1, 0, 0),
             Position::new(1, 1, 0),
             Position::new(1, 1, 1),
+            Position::new(1, 1, 2),
         ));
 
         let iterator: PieceIterator = template.into_iter();
 
         assert_eq!(iterator.count(), 24);
+    }
+
+
+    #[test]
+    fn templates_should_return_less_than_24_pieces_for_symmetric_templates() {
+        let template = Template::new(vec!(
+            Position::new(0, 0, 0),
+            Position::new(0, 1, 0),
+            Position::new(1, 0, 0),
+            Position::new(1, 1, 0),
+        ));
+
+        let iterator: PieceIterator = template.into_iter();
+
+        assert_eq!(iterator.count(), 3);
     }
 
     #[test]

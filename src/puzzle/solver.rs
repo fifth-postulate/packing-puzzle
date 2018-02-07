@@ -167,5 +167,5 @@ mod tests {
 
         let mut solutions: Vec<Solution> = vec!();
         solve(&target, bag, &mut |solution|{ solutions.push(solution)});
-        assert_eq!(solutions.len(), 72);
+        assert_eq!(solutions.len(), 8);
     }}
