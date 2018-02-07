@@ -6,8 +6,10 @@ You can use this library by adding a dependency to your `Cargo.toml`
 
 ```toml
 [dependencies]
-pack = "0.1.0"
+pack = "*"
 ```
+
+If you want to fix a specific version, feel free to enter a version number.
 
 ## Slothouber-Graatsma Puzzle
 The [Slohouber-Graatsma puzzle][puzzle] asks for
