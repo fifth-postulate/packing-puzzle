@@ -202,21 +202,21 @@ pub trait Transformable {
 
 /// Entities can be translated through space. This struct determines how.
 #[derive(Debug, PartialEq, Eq, Hash)]
-pub struct Translation {
-    delta : (i8, i8, i8),
+pub struct Translation<T> {
+    delta : T,
 }
 
-impl Translation {
+impl Translation<(i8, i8, i8)> {
     /// Create a Translation by stating how to move along each coordinate.
-    pub fn new(x: i8, y: i8, z: i8) -> Translation {
+    pub fn new(x: i8, y: i8, z: i8) -> Translation<(i8, i8, i8)> {
         Translation { delta: (x, y, z) }
     }
 }
 
 /// Contract how to translate entities.
-pub trait Translatable {
+pub trait Translatable<T> {
     /// move entity by the `Translation`.
-    fn translate(&mut self, translation: &Translation);
+    fn translate(&mut self, translation: &Translation<T>);
 }
 
 /// Position of a cubelet.
@@ -234,12 +234,14 @@ impl Position {
     }
 
     /// Return a translation to move a point to an other.
-    pub fn to(&self, other: &Self) -> Translation {
-        Translation::new(
+    pub fn to(&self, other: &Self) -> Translation<(i8, i8, i8)> {
+        let translation : Translation<(i8, i8, i8)> = Translation::new(
             other.x - self.x,
             other.y - self.y,
             other.z - self.z
-        )
+        );
+
+        translation
     }
 }
 
@@ -303,8 +305,8 @@ impl Transformable for Position {
     }
 }
 
-impl Translatable for Position {
-    fn translate(&mut self, translation: &Translation) {
+impl Translatable<(i8, i8, i8)> for Position {
+    fn translate(&mut self, translation: &Translation<(i8, i8, i8)>) {
         self.x += translation.delta.0;
         self.y += translation.delta.1;
         self.z += translation.delta.2;
@@ -370,8 +372,8 @@ impl Transformable for Piece {
     }
 }
 
-impl Translatable for Piece {
-    fn translate(&mut self, translation: &Translation) {
+impl Translatable<(i8, i8, i8)> for Piece {
+    fn translate(&mut self, translation: &Translation<(i8, i8, i8)>) {
         for position in &mut self.positions {
             position.translate(translation);
         }
