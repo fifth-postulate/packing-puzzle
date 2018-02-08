@@ -222,6 +222,7 @@ pub trait Translatable<T> {
 /// Position of a cubelet.
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct Position {
+    base: (i8, i8, i8),
     x: i8,
     y: i8,
     z: i8,
@@ -230,7 +231,7 @@ pub struct Position {
 impl Position {
     /// Create  position at the given coordinates.
     pub fn new(x: i8, y: i8, z: i8) -> Position {
-        Position { x, y, z }
+        Position { base: (x, y, z), x, y, z }
     }
 
     /// Return a translation to move a point to an other.
@@ -302,6 +303,7 @@ impl Transformable for Position {
             CubeSymmetry::E3201 => { self.x =  z; self.y =  y; self.z = -x; },
             CubeSymmetry::E3210 => { self.x =  x; self.y = -y; self.z = -z; },
          }
+         self.base = (self.x, self.y, self.z)
     }
 }
 
@@ -310,6 +312,7 @@ impl Translatable<(i8, i8, i8)> for Position {
         self.x += translation.delta.0;
         self.y += translation.delta.1;
         self.z += translation.delta.2;
+        self.base = (self.x, self.y, self.z);
     }
 }
 
