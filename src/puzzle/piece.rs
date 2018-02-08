@@ -223,23 +223,20 @@ pub trait Translatable<T> {
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct Position {
     base: (i8, i8, i8),
-    x: i8,
-    y: i8,
-    z: i8,
 }
 
 impl Position {
     /// Create  position at the given coordinates.
     pub fn new(x: i8, y: i8, z: i8) -> Position {
-        Position { base: (x, y, z), x, y, z }
+        Position { base: (x, y, z) }
     }
 
     /// Return a translation to move a point to an other.
     pub fn to(&self, other: &Self) -> Translation<(i8, i8, i8)> {
         let translation : Translation<(i8, i8, i8)> = Translation::new(
-            other.x - self.x,
-            other.y - self.y,
-            other.z - self.z
+            other.base.0 - self.base.0,
+            other.base.1 - self.base.1,
+            other.base.2 - self.base.2
         );
 
         translation
@@ -248,17 +245,17 @@ impl Position {
 
 impl Display for Position {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        write!(f, "({}, {}, {})", self.x, self.y, self.z)
+        write!(f, "({}, {}, {})", self.base.0, self.base.1, self.base.2)
     }
 }
 
 impl Ord for Position {
     fn cmp(&self, other: &Self) -> Ordering {
-        match self.z.cmp(&other.z) {
+        match self.base.2.cmp(&other.base.2) {
             Ordering::Equal => {
-                match self.y.cmp(&other.y) {
+                match self.base.1.cmp(&other.base.1) {
                     Ordering::Equal => {
-                        self.x.cmp(&other.x)
+                        self.base.0.cmp(&other.base.0)
                     },
                     y_ordering => y_ordering,
                 }
@@ -276,43 +273,46 @@ impl PartialOrd for Position {
 
 impl Transformable for Position {
     fn transform(&mut self, symmetry: &CubeSymmetry) {
-        let (x, y, z) = (self.x, self.y, self.z);
+        let (x, y, z) = self.base;
+        let sx: i8;
+        let sy: i8;
+        let sz: i8;
         match *symmetry {
-            CubeSymmetry::E0123 => { self.x =  x; self.y =  y; self.z =  z; },
-            CubeSymmetry::E0132 => { self.x = -z; self.y = -y; self.z = -x; },
-            CubeSymmetry::E0213 => { self.x = -x; self.y = -z; self.z = -y; },
-            CubeSymmetry::E0231 => { self.x =  y; self.y =  z; self.z =  x; },
-            CubeSymmetry::E0312 => { self.x =  z; self.y =  x; self.z =  y; },
-            CubeSymmetry::E0321 => { self.x = -y; self.y = -x; self.z = -z; },
-            CubeSymmetry::E1023 => { self.x =  z; self.y = -y; self.z =  x; },
-            CubeSymmetry::E1032 => { self.x = -x; self.y =  y; self.z = -z; },
-            CubeSymmetry::E1203 => { self.x = -z; self.y = -x; self.z =  y; },
-            CubeSymmetry::E1230 => { self.x = -y; self.y =  x; self.z =  z; },
-            CubeSymmetry::E1302 => { self.x =  x; self.y =  z; self.z = -y; },
-            CubeSymmetry::E1320 => { self.x =  y; self.y = -z; self.z = -x; },
-            CubeSymmetry::E2013 => { self.x = -y; self.y =  z; self.z = -x; },
-            CubeSymmetry::E2031 => { self.x =  x; self.y = -z; self.z =  y; },
-            CubeSymmetry::E2103 => { self.x =  y; self.y =  x; self.z = -z; },
-            CubeSymmetry::E2130 => { self.x =  z; self.y = -x; self.z = -y; },
-            CubeSymmetry::E2301 => { self.x = -x; self.y = -y; self.z =  z; },
-            CubeSymmetry::E2310 => { self.x = -z; self.y =  y; self.z =  x; },
-            CubeSymmetry::E3012 => { self.x =  y; self.y = -x; self.z =  z; },
-            CubeSymmetry::E3021 => { self.x = -z; self.y =  x; self.z = -y; },
-            CubeSymmetry::E3102 => { self.x = -y; self.y = -z; self.z =  x; },
-            CubeSymmetry::E3120 => { self.x = -x; self.y =  z; self.z =  y; },
-            CubeSymmetry::E3201 => { self.x =  z; self.y =  y; self.z = -x; },
-            CubeSymmetry::E3210 => { self.x =  x; self.y = -y; self.z = -z; },
+            CubeSymmetry::E0123 => { sx =  x; sy =  y; sz =  z; },
+            CubeSymmetry::E0132 => { sx = -z; sy = -y; sz = -x; },
+            CubeSymmetry::E0213 => { sx = -x; sy = -z; sz = -y; },
+            CubeSymmetry::E0231 => { sx =  y; sy =  z; sz =  x; },
+            CubeSymmetry::E0312 => { sx =  z; sy =  x; sz =  y; },
+            CubeSymmetry::E0321 => { sx = -y; sy = -x; sz = -z; },
+            CubeSymmetry::E1023 => { sx =  z; sy = -y; sz =  x; },
+            CubeSymmetry::E1032 => { sx = -x; sy =  y; sz = -z; },
+            CubeSymmetry::E1203 => { sx = -z; sy = -x; sz =  y; },
+            CubeSymmetry::E1230 => { sx = -y; sy =  x; sz =  z; },
+            CubeSymmetry::E1302 => { sx =  x; sy =  z; sz = -y; },
+            CubeSymmetry::E1320 => { sx =  y; sy = -z; sz = -x; },
+            CubeSymmetry::E2013 => { sx = -y; sy =  z; sz = -x; },
+            CubeSymmetry::E2031 => { sx =  x; sy = -z; sz =  y; },
+            CubeSymmetry::E2103 => { sx =  y; sy =  x; sz = -z; },
+            CubeSymmetry::E2130 => { sx =  z; sy = -x; sz = -y; },
+            CubeSymmetry::E2301 => { sx = -x; sy = -y; sz =  z; },
+            CubeSymmetry::E2310 => { sx = -z; sy =  y; sz =  x; },
+            CubeSymmetry::E3012 => { sx =  y; sy = -x; sz =  z; },
+            CubeSymmetry::E3021 => { sx = -z; sy =  x; sz = -y; },
+            CubeSymmetry::E3102 => { sx = -y; sy = -z; sz =  x; },
+            CubeSymmetry::E3120 => { sx = -x; sy =  z; sz =  y; },
+            CubeSymmetry::E3201 => { sx =  z; sy =  y; sz = -x; },
+            CubeSymmetry::E3210 => { sx =  x; sy = -y; sz = -z; },
          }
-         self.base = (self.x, self.y, self.z)
+         self.base = (sx, sy, sz)
     }
 }
 
 impl Translatable<(i8, i8, i8)> for Position {
     fn translate(&mut self, translation: &Translation<(i8, i8, i8)>) {
-        self.x += translation.delta.0;
-        self.y += translation.delta.1;
-        self.z += translation.delta.2;
-        self.base = (self.x, self.y, self.z);
+        let x = self.base.0 + translation.delta.0;
+        let y = self.base.1 + translation.delta.1;
+        let z = self.base.2 + translation.delta.2;
+        self.base = (x, y, z);
     }
 }
 
