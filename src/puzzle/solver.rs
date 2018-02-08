@@ -7,12 +7,12 @@ use super::pieces::Bag;
 /// Region to be packed.
 #[derive(Debug, PartialEq, Eq, Hash)]
 pub struct Target {
-    collection: Vec<Position>,
+    collection: Vec<Position<(i8, i8, i8)>>,
 }
 
 impl Target {
     /// Create a new `Target` from a collection of `Position`s.
-    pub fn new(collection: Vec<Position>) -> Target {
+    pub fn new(collection: Vec<Position<(i8, i8, i8)>>) -> Target {
         Target { collection }
     }
 
@@ -29,7 +29,7 @@ impl Target {
     /// Place a `Piece` in the `Target`. *Note* caller is responsible to check
     /// if the `Piece` will actually fit.
     pub fn place(&self, piece: &Piece) -> Target {
-        let collection: Vec<Position> = self.collection
+        let collection: Vec<Position<(i8, i8, i8)>> = self.collection
             .iter()
             .filter(|position| !piece.contains(position))
             .cloned()
@@ -40,7 +40,7 @@ impl Target {
 }
 
 impl MinimumPosition for Target {
-    fn minimum_position(&self) -> Option<Position> {
+    fn minimum_position(&self) -> Option<Position<(i8, i8, i8)>> {
         self.collection.iter().min().cloned()
     }
 }

@@ -9,13 +9,13 @@ use std::fmt::{Display, Formatter, Error};
 /// Iterating over a one gets a piece in all the possible orientations.
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct Template {
-    positions: Vec<Position>,
+    positions: Vec<Position<(i8, i8, i8)>>,
     name: Option<String>
 }
 
 impl Template {
     /// Create a `Template` from a vector of `Position`s.
-    pub fn new(positions: Vec<Position>) -> Template {
+    pub fn new(positions: Vec<Position<(i8, i8, i8)>>) -> Template {
         Template { positions, name: None }
     }
 
@@ -221,13 +221,13 @@ pub trait Translatable<T> {
 
 /// Position of a cubelet.
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
-pub struct Position {
-    base: (i8, i8, i8),
+pub struct Position<T> {
+    base: T,
 }
 
-impl Position {
+impl Position<(i8, i8, i8)> {
     /// Create  position at the given coordinates.
-    pub fn new(x: i8, y: i8, z: i8) -> Position {
+    pub fn new(x: i8, y: i8, z: i8) -> Position<(i8, i8, i8)> {
         Position { base: (x, y, z) }
     }
 
@@ -243,13 +243,13 @@ impl Position {
     }
 }
 
-impl Display for Position {
+impl Display for Position<(i8, i8, i8)> {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         write!(f, "({}, {}, {})", self.base.0, self.base.1, self.base.2)
     }
 }
 
-impl Ord for Position {
+impl Ord for Position<(i8, i8, i8)> {
     fn cmp(&self, other: &Self) -> Ordering {
         match self.base.2.cmp(&other.base.2) {
             Ordering::Equal => {
@@ -265,13 +265,13 @@ impl Ord for Position {
     }
 }
 
-impl PartialOrd for Position {
+impl PartialOrd for Position<(i8, i8, i8)> {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
     }
 }
 
-impl Transformable for Position {
+impl Transformable for Position<(i8, i8, i8)> {
     fn transform(&mut self, symmetry: &CubeSymmetry) {
         let (x, y, z) = self.base;
         let sx: i8;
@@ -307,7 +307,7 @@ impl Transformable for Position {
     }
 }
 
-impl Translatable<(i8, i8, i8)> for Position {
+impl Translatable<(i8, i8, i8)> for Position<(i8, i8, i8)> {
     fn translate(&mut self, translation: &Translation<(i8, i8, i8)>) {
         let x = self.base.0 + translation.delta.0;
         let y = self.base.1 + translation.delta.1;
@@ -319,31 +319,31 @@ impl Translatable<(i8, i8, i8)> for Position {
 /// Contract to find the minimal `Position`
 pub trait MinimumPosition {
     /// Return the minimal `Position` for the entity.
-    fn minimum_position(&self) -> Option<Position>;
+    fn minimum_position(&self) -> Option<Position<(i8, i8, i8)>>;
 }
 
 /// Entities that get packed.
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct Piece {
-    positions: Vec<Position>,
+    positions: Vec<Position<(i8, i8, i8)>>,
     name: Option<String>
 }
 
 impl Piece {
     /// Create a new `Piece` from a collection of `Position`s.
-    pub fn new(mut positions: Vec<Position>) -> Piece {
+    pub fn new(mut positions: Vec<Position<(i8, i8, i8)>>) -> Piece {
         positions.sort();
         Piece { positions, name: None }
     }
 
     /// Determine if a `Position` is contained in this `Piece`.
-    pub fn contains(&self, position: &Position) -> bool {
+    pub fn contains(&self, position: &Position<(i8, i8, i8)>) -> bool {
         self.positions.contains(position)
     }
 
     /// Create an `Iterator` that iterates over all `Position`s.
     pub fn iter(&self) -> PositionIterator {
-        let positions: Vec<Position> = self.positions.to_vec();
+        let positions: Vec<Position<(i8, i8, i8)>> = self.positions.to_vec();
         PositionIterator::new(positions)
     }
 }
@@ -384,7 +384,7 @@ impl Translatable<(i8, i8, i8)> for Piece {
 }
 
 impl MinimumPosition for Piece {
-    fn minimum_position(&self) -> Option<Position> {
+    fn minimum_position(&self) -> Option<Position<(i8, i8, i8)>> {
         self.positions.iter().min().cloned()
     }
 }
@@ -392,18 +392,18 @@ impl MinimumPosition for Piece {
 /// Iterate over the `Position`s of entities.
 pub struct PositionIterator {
     index: usize,
-    positions: Vec<Position>,
+    positions: Vec<Position<(i8, i8, i8)>>,
 }
 
 impl PositionIterator {
     /// Create a `PositionIterator` that iterates over the provided positions.
-    pub fn new(positions: Vec<Position>) -> PositionIterator {
+    pub fn new(positions: Vec<Position<(i8, i8, i8)>>) -> PositionIterator {
         PositionIterator { index: 0, positions }
     }
 }
 
 impl Iterator for PositionIterator {
-    type Item = Position;
+    type Item = Position<(i8, i8, i8)>;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.index < self.positions.len() {
