@@ -66,39 +66,9 @@ impl<T> PartialOrd for Position<T> where T: PartialOrd {
     }
 }
 
-impl Transformable for Position<(i8, i8, i8)> {
+impl<T> Transformable for Position<T> where T: Transformable {
     fn transform(&mut self, symmetry: &CubeSymmetry) {
-        let (x, y, z) = self.base;
-        let sx: i8;
-        let sy: i8;
-        let sz: i8;
-        match *symmetry {
-            CubeSymmetry::E0123 => { sx =  x; sy =  y; sz =  z; },
-            CubeSymmetry::E0132 => { sx = -z; sy = -y; sz = -x; },
-            CubeSymmetry::E0213 => { sx = -x; sy = -z; sz = -y; },
-            CubeSymmetry::E0231 => { sx =  y; sy =  z; sz =  x; },
-            CubeSymmetry::E0312 => { sx =  z; sy =  x; sz =  y; },
-            CubeSymmetry::E0321 => { sx = -y; sy = -x; sz = -z; },
-            CubeSymmetry::E1023 => { sx =  z; sy = -y; sz =  x; },
-            CubeSymmetry::E1032 => { sx = -x; sy =  y; sz = -z; },
-            CubeSymmetry::E1203 => { sx = -z; sy = -x; sz =  y; },
-            CubeSymmetry::E1230 => { sx = -y; sy =  x; sz =  z; },
-            CubeSymmetry::E1302 => { sx =  x; sy =  z; sz = -y; },
-            CubeSymmetry::E1320 => { sx =  y; sy = -z; sz = -x; },
-            CubeSymmetry::E2013 => { sx = -y; sy =  z; sz = -x; },
-            CubeSymmetry::E2031 => { sx =  x; sy = -z; sz =  y; },
-            CubeSymmetry::E2103 => { sx =  y; sy =  x; sz = -z; },
-            CubeSymmetry::E2130 => { sx =  z; sy = -x; sz = -y; },
-            CubeSymmetry::E2301 => { sx = -x; sy = -y; sz =  z; },
-            CubeSymmetry::E2310 => { sx = -z; sy =  y; sz =  x; },
-            CubeSymmetry::E3012 => { sx =  y; sy = -x; sz =  z; },
-            CubeSymmetry::E3021 => { sx = -z; sy =  x; sz = -y; },
-            CubeSymmetry::E3102 => { sx = -y; sy = -z; sz =  x; },
-            CubeSymmetry::E3120 => { sx = -x; sy =  z; sz =  y; },
-            CubeSymmetry::E3201 => { sx =  z; sy =  y; sz = -x; },
-            CubeSymmetry::E3210 => { sx =  x; sy = -y; sz = -z; },
-         }
-         self.base = (sx, sy, sz)
+        self.base.transform(&symmetry);
     }
 }
 
