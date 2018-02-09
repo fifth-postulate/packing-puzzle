@@ -2,8 +2,10 @@
 //!
 //! At the moment only objects that are aligned with a ordinary grid can be defined.
 
+use super::vector::{VectorDifference, VectorAdd};
 use std::cmp::Ordering;
 use std::fmt::{Display, Formatter, Error};
+
 
 /// A `Template` is a container to hold a representation of a `Piece`. By
 /// Iterating over a one gets a piece in all the possible orientations.
@@ -67,7 +69,7 @@ impl Iterator for PieceIterator {
 
                 piece.transform(&symmetry);
                 let minimum_position = piece.minimum_position();
-                let translation = minimum_position.unwrap().to(&Position::new(0, 0, 0));
+                let translation = minimum_position.unwrap().to(&Position::new(0, 0, 0)); // TODO Position::zero
                 piece.translate(&translation);
 
                 piece
@@ -206,6 +208,12 @@ pub struct Translation<T> {
     delta : T,
 }
 
+impl<T> From<T> for Translation<T> where T: VectorDifference<T> {
+    fn from(t: T) -> Self {
+        Translation { delta: t }
+    }
+}
+
 impl Translation<(i8, i8, i8)> {
     /// Create a Translation by stating how to move along each coordinate.
     pub fn new(x: i8, y: i8, z: i8) -> Translation<(i8, i8, i8)> {
@@ -214,7 +222,7 @@ impl Translation<(i8, i8, i8)> {
 }
 
 /// Contract how to translate entities.
-pub trait Translatable<T> {
+pub trait Translatable<T> where T: VectorAdd<T> {
     /// move entity by the `Translation`.
     fn translate(&mut self, translation: &Translation<T>);
 }
@@ -233,13 +241,9 @@ impl Position<(i8, i8, i8)> {
 
     /// Return a translation to move a point to an other.
     pub fn to(&self, other: &Self) -> Translation<(i8, i8, i8)> {
-        let translation : Translation<(i8, i8, i8)> = Translation::new(
-            other.base.0 - self.base.0,
-            other.base.1 - self.base.1,
-            other.base.2 - self.base.2
-        );
+        let translation : (i8, i8, i8) = self.base.difference(&other.base);
 
-        translation
+        Translation::from(translation)
     }
 }
 
@@ -307,12 +311,9 @@ impl Transformable for Position<(i8, i8, i8)> {
     }
 }
 
-impl Translatable<(i8, i8, i8)> for Position<(i8, i8, i8)> {
-    fn translate(&mut self, translation: &Translation<(i8, i8, i8)>) {
-        let x = self.base.0 + translation.delta.0;
-        let y = self.base.1 + translation.delta.1;
-        let z = self.base.2 + translation.delta.2;
-        self.base = (x, y, z);
+impl<T> Translatable<T> for Position<T> where T: VectorAdd<T> {
+    fn translate(&mut self, translation: &Translation<T>) {
+        self.base.add(&translation.delta);
     }
 }
 
