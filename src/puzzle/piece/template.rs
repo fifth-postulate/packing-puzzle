@@ -26,7 +26,7 @@ impl Template {
 }
 
 impl IntoIterator for Template {
-    type Item = Piece;
+    type Item = Piece<(i8, i8, i8)>;
     type IntoIter = PieceIterator;
 
     fn into_iter(self) -> Self::IntoIter {
@@ -39,7 +39,7 @@ impl IntoIterator for Template {
 /// from a `Template`
 pub struct PieceIterator {
     symmetry_iterator: CubeSymmetryIterator,
-    seen_pieces: Vec<Piece>,
+    seen_pieces: Vec<Piece<(i8, i8, i8)>>,
     template: Template,
 }
 
@@ -55,7 +55,7 @@ impl PieceIterator {
 }
 
 impl Iterator for PieceIterator {
-    type Item = Piece;
+    type Item = Piece<(i8, i8, i8)>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let mut symmetry_option = self.symmetry_iterator.next();
@@ -87,7 +87,7 @@ impl Iterator for PieceIterator {
     }
 }
 
-impl From<Template> for Piece {
+impl From<Template> for Piece<(i8, i8, i8)> {
     fn from(template: Template) -> Self {
         Piece { positions : template.positions, name : template.name }
     }

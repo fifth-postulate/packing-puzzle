@@ -12,35 +12,36 @@ pub use self::translation::{Translatable, Translation};
 pub use self::position::{Position, Positionable, MinimumPosition};
 pub use self::template::Template;
 
+use super::vector::VectorAdd;
 use std::fmt::{Display, Formatter, Error};
 
 /// Entities that get packed.
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
-pub struct Piece {
-    positions: Vec<Position<(i8, i8, i8)>>,
+pub struct Piece<T> {
+    positions: Vec<Position<T>>,
     name: Option<String>
 }
 
-impl Piece {
+impl<T> Piece<T> where T: PartialOrd + Ord + Clone {
     /// Create a new `Piece` from a collection of `Position`s.
-    pub fn new(mut positions: Vec<Position<(i8, i8, i8)>>) -> Piece {
+    pub fn new(mut positions: Vec<Position<T>>) -> Piece<T> {
         positions.sort();
         Piece { positions, name: None }
     }
 
     /// Determine if a `Position` is contained in this `Piece`.
-    pub fn contains(&self, position: &Position<(i8, i8, i8)>) -> bool {
+    pub fn contains(&self, position: &Position<T>) -> bool {
         self.positions.contains(position)
     }
 
     /// Create an `Iterator` that iterates over all `Position`s.
-    pub fn iter(&self) -> PositionIterator {
-        let positions: Vec<Position<(i8, i8, i8)>> = self.positions.to_vec();
+    pub fn iter(&self) -> PositionIterator<T> {
+        let positions: Vec<Position<T>> = self.positions.to_vec();
         PositionIterator::new(positions)
     }
 }
 
-impl Display for Piece {
+impl Display for Piece<(i8,i8,i8)> {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         write!(f, "[")?;
         let name = self.name.clone().unwrap_or_else(|| String::from(""));
@@ -52,7 +53,20 @@ impl Display for Piece {
     }
 }
 
-impl Transformable for Piece {
+
+impl Display for Piece<(i8, i8)> {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        write!(f, "[")?;
+        let name = self.name.clone().unwrap_or_else(|| String::from(""));
+        write!(f, "{}", name)?;
+        for position in &self.positions {
+            write!(f, "{}", position)?
+        }
+        write!(f, "]")
+    }
+}
+
+impl<T> Transformable for Piece<T> where T: Transformable + PartialOrd + Ord {
     fn transform(&mut self, symmetry: &CubeSymmetry) {
         for position in &mut self.positions {
             position.transform(symmetry);
@@ -61,35 +75,35 @@ impl Transformable for Piece {
     }
 }
 
-impl Translatable<(i8, i8, i8)> for Piece {
-    fn translate(&mut self, translation: &Translation<(i8, i8, i8)>) {
+impl<T> Translatable<T> for Piece<T> where T: VectorAdd<T>  {
+    fn translate(&mut self, translation: &Translation<T>) {
         for position in &mut self.positions {
             position.translate(translation);
         }
     }
 }
 
-impl MinimumPosition<(i8, i8, i8)> for Piece {
-    fn minimum_position(&self) -> Option<Position<(i8, i8, i8)>> {
+impl<T> MinimumPosition<T> for Piece<T> where T: PartialOrd + Ord + Clone {
+    fn minimum_position(&self) -> Option<Position<T>> {
         self.positions.iter().min().cloned()
     }
 }
 
 /// Iterate over the `Position`s of entities.
-pub struct PositionIterator {
+pub struct PositionIterator<T> {
     index: usize,
-    positions: Vec<Position<(i8, i8, i8)>>,
+    positions: Vec<Position<T>>,
 }
 
-impl PositionIterator {
+impl<T> PositionIterator<T> {
     /// Create a `PositionIterator` that iterates over the provided positions.
-    pub fn new(positions: Vec<Position<(i8, i8, i8)>>) -> PositionIterator {
+    pub fn new(positions: Vec<Position<T>>) -> PositionIterator<T> {
         PositionIterator { index: 0, positions }
     }
 }
 
-impl Iterator for PositionIterator {
-    type Item = Position<(i8, i8, i8)>;
+impl<T> Iterator for PositionIterator<T> where T: Clone {
+    type Item = Position<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.index < self.positions.len() {

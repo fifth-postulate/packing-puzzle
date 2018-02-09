@@ -44,7 +44,6 @@ impl Display for Position<(i8, i8)> {
     }
 }
 
-
 impl<T> Ord for Position<T> where T: PartialOrd + Ord {
     fn cmp(&self, other: &Self) -> Ordering {
         self.base.cmp(&other.base)

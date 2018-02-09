@@ -22,13 +22,13 @@ impl Target {
     }
 
     /// Determine if a `Piece` can be placed in the `Target`.
-    pub fn fits(&self, piece: &Piece) -> bool {
+    pub fn fits(&self, piece: &Piece<(i8, i8, i8)>) -> bool {
         piece.iter().all(|position| self.collection.contains(&position))
     }
 
     /// Place a `Piece` in the `Target`. *Note* caller is responsible to check
     /// if the `Piece` will actually fit.
-    pub fn place(&self, piece: &Piece) -> Target {
+    pub fn place(&self, piece: &Piece<(i8, i8, i8)>) -> Target {
         let collection: Vec<Position<(i8, i8, i8)>> = self.collection
             .iter()
             .filter(|position| !piece.contains(position))
@@ -48,7 +48,7 @@ impl MinimumPosition<(i8, i8, i8)> for Target {
 /// (Partial) solution of a packing problem. Piece at their correct location are listed.
 #[derive(Debug)]
 pub struct Solution {
-    pieces: Vec<Piece>
+    pieces: Vec<Piece<(i8, i8, i8)>>
 }
 
 impl Solution {
@@ -61,8 +61,8 @@ impl Solution {
     ///
     /// Returns a new `Solutions` with the `Piece` added. *Note* the caller is
     /// responsible for checking if the `Piece` actually fits in the `Target`.
-    pub fn record(&self, piece: &Piece) -> Solution {
-        let mut pieces: Vec<Piece> = self.pieces.to_vec();
+    pub fn record(&self, piece: &Piece<(i8, i8, i8)>) -> Solution {
+        let mut pieces: Vec<Piece<(i8, i8, i8)>> = self.pieces.to_vec();
         pieces.push(piece.clone());
 
         Solution { pieces }
