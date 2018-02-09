@@ -103,6 +103,21 @@ mod tests {
     use super::*;
 
     #[test]
+    fn templates_are_equal_on_values() {
+        let a = Template::new(vec!(
+            Position::new(0,0,0),
+            Position::new(1,0,0),
+        ));
+        let b = Template::new(vec!(
+            Position::new(0,0,0),
+            Position::new(1,0,0),
+        ));
+
+        assert_eq!(a, b);
+    }
+
+
+    #[test]
     fn templates_should_return_24_pieces_unsymmetric_templates() {
         let template = Template::new(vec!(
             Position::new(0, 0, 0),

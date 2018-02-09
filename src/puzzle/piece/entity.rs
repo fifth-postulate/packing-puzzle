@@ -111,3 +111,47 @@ impl<T> Iterator for PositionIterator<T> where T: Clone {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn piece_should_translate() {
+        let mut piece = Piece::new(vec!(
+            Position::new(0, 0, 0),
+            Position::new(1, 0, 0),
+            Position::new(1, 1, 0),
+            Position::new(1, 1, 1),
+        ));
+        let translation = Translation::new(5, -3, 0);
+
+        piece.translate(&translation);
+
+        assert_eq!(piece, Piece::new(vec!(
+            Position::new(5, -3, 0),
+            Position::new(6, -3, 0),
+            Position::new(6, -2, 0),
+            Position::new(6, -2, 1),
+        )));
+    }
+
+    #[test]
+    fn piece_should_tranform() {
+        let mut piece = Piece::new(vec!(
+            Position::new(0, 0, 0),
+            Position::new(1, 0, 0),
+            Position::new(1, 1, 0),
+            Position::new(1, 1, 1),
+        ));
+
+        piece.transform(&CubeSymmetry::E2103);
+
+        assert_eq!(piece, Piece::new(vec!(
+            Position::new(0, 0, 0),
+            Position::new(0, 1, 0),
+            Position::new(1, 1, 0),
+            Position::new(1, 1, -1),
+        )));
+    }
+}

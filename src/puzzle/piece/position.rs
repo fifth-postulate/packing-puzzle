@@ -73,3 +73,16 @@ pub trait MinimumPosition<T> where T: PartialOrd + Ord {
     /// Return the minimal `Position` for the entity.
     fn minimum_position(&self) -> Option<Position<T>>;
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn positions_are_equal_on_values() {
+        let a = Position::new(0, 1, 2);
+        let b = Position::new(0, 1, 2);
+
+        assert_eq!(a, b);
+    }
+}
