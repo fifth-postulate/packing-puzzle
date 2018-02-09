@@ -33,9 +33,9 @@ impl Position<(i8, i8, i8)> {
     }
 }
 
-impl Positionable<(i8, i8, i8)> for Position<(i8, i8, i8)> {
-    fn to(&self, other: &Self) -> Translation<(i8, i8, i8)> {
-        let translation : (i8, i8, i8) = self.base.difference(&other.base);
+impl<T> Positionable<T> for Position<T> where T: VectorDifference<T> {
+    fn to(&self, other: &Self) -> Translation<T> {
+        let translation: T = self.base.difference(&other.base);
 
         Translation::from(translation)
     }
