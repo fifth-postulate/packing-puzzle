@@ -89,7 +89,11 @@ impl Iterator for PieceIterator {
 
 impl From<Template> for Piece<(i8, i8, i8)> {
     fn from(template: Template) -> Self {
-        Piece { positions : template.positions, name : template.name }
+        if template.name.is_some() {
+            Piece::named(template.positions, template.name.unwrap())
+        } else {
+            Piece::new(template.positions)
+        }
     }
 }
 
