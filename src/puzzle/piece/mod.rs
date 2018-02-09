@@ -47,6 +47,13 @@ impl Display for Position<(i8, i8, i8)> {
     }
 }
 
+impl Display for Position<(i8, i8)> {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        write!(f, "({}, {})", self.base.0, self.base.1)
+    }
+}
+
+
 impl Ord for Position<(i8, i8, i8)> {
     fn cmp(&self, other: &Self) -> Ordering {
         match self.base.2.cmp(&other.base.2) {
