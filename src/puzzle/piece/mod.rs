@@ -79,9 +79,9 @@ impl<T> Translatable<T> for Position<T> where T: VectorAdd<T> {
 }
 
 /// Contract to find the minimal `Position`
-pub trait MinimumPosition {
+pub trait MinimumPosition<T> where T: PartialOrd + Ord {
     /// Return the minimal `Position` for the entity.
-    fn minimum_position(&self) -> Option<Position<(i8, i8, i8)>>;
+    fn minimum_position(&self) -> Option<Position<T>>;
 }
 
 /// Entities that get packed.
@@ -139,7 +139,7 @@ impl Translatable<(i8, i8, i8)> for Piece {
     }
 }
 
-impl MinimumPosition for Piece {
+impl MinimumPosition<(i8, i8, i8)> for Piece {
     fn minimum_position(&self) -> Option<Position<(i8, i8, i8)>> {
         self.positions.iter().min().cloned()
     }

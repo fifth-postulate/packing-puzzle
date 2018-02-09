@@ -39,7 +39,7 @@ impl Target {
     }
 }
 
-impl MinimumPosition for Target {
+impl MinimumPosition<(i8, i8, i8)> for Target {
     fn minimum_position(&self) -> Option<Position<(i8, i8, i8)>> {
         self.collection.iter().min().cloned()
     }
