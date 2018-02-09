@@ -193,6 +193,6 @@ mod tests {
         let mut output: String = String::new();
         write!(&mut output, "{}", solution).expect("to cleanly write solution");
 
-        assert_eq!(output, String::from("<[(0, 0, 0)(1, 0, 0)(0, 1, 0)(0, 0, 1)][(1, 1, 0)(1, 0, 1)(0, 1, 1)(1, 1, 1)]>"));
+        assert_eq!(output, String::from("<[(0, 0, 0)(0, 0, 1)(0, 1, 0)(1, 0, 0)][(0, 1, 1)(1, 0, 1)(1, 1, 0)(1, 1, 1)]>"));
     }
 }

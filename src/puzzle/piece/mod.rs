@@ -54,25 +54,15 @@ impl Display for Position<(i8, i8)> {
 }
 
 
-impl Ord for Position<(i8, i8, i8)> {
+impl<T> Ord for Position<T> where T: PartialOrd + Ord {
     fn cmp(&self, other: &Self) -> Ordering {
-        match self.base.2.cmp(&other.base.2) {
-            Ordering::Equal => {
-                match self.base.1.cmp(&other.base.1) {
-                    Ordering::Equal => {
-                        self.base.0.cmp(&other.base.0)
-                    },
-                    y_ordering => y_ordering,
-                }
-            },
-            z_ordering => z_ordering,
-        }
+        self.base.cmp(&other.base)
     }
 }
 
-impl PartialOrd for Position<(i8, i8, i8)> {
+impl<T> PartialOrd for Position<T> where T: PartialOrd {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
+        self.base.partial_cmp(&other.base)
     }
 }
 
