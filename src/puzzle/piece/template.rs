@@ -1,7 +1,7 @@
 //! template is a container to hold orientations of pieces.
 
 use std::convert::From;
-use super::{Position, Piece, CubeSymmetryIterator, Translatable, Transformable, MinimumPosition};
+use super::{Position, Positionable, Piece, CubeSymmetryIterator, Translatable, Transformable, MinimumPosition};
 
 /// A `Template` is a container to hold a representation of a `Piece`. By
 /// Iterating over a one gets a piece in all the possible orientations.

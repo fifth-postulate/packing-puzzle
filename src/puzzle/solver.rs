@@ -1,7 +1,7 @@
 //! Solver for packing problems.
 use std::fmt::{Display, Formatter, Error};
 
-use super::piece::{MinimumPosition, Position, Translatable, Piece};
+use super::piece::{MinimumPosition, Position, Positionable, Translatable, Piece};
 use super::pieces::Bag;
 
 /// Region to be packed.

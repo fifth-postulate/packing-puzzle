@@ -10,7 +10,6 @@ pub use self::symmetry::{Transformable, CubeSymmetry, CubeSymmetryIterator};
 pub use self::translation::{Translatable, Translation};
 pub use self::template::Template;
 
-
 use super::vector::{VectorDifference, VectorAdd};
 use std::cmp::Ordering;
 use std::fmt::{Display, Formatter, Error};
@@ -21,14 +20,21 @@ pub struct Position<T> {
     base: T,
 }
 
+/// Move an entity to certain `Position`.
+pub trait Positionable<T> {
+    /// Determine the `Translation` which takes the entity to a `Position`.
+    fn to(&self, other: &Self) -> Translation<T>;
+}
+
 impl Position<(i8, i8, i8)> {
     /// Create  position at the given coordinates.
     pub fn new(x: i8, y: i8, z: i8) -> Position<(i8, i8, i8)> {
         Position { base: (x, y, z) }
     }
+}
 
-    /// Return a translation to move a point to an other.
-    pub fn to(&self, other: &Self) -> Translation<(i8, i8, i8)> {
+impl Positionable<(i8, i8, i8)> for Position<(i8, i8, i8)> {
+    fn to(&self, other: &Self) -> Translation<(i8, i8, i8)> {
         let translation : (i8, i8, i8) = self.base.difference(&other.base);
 
         Translation::from(translation)
