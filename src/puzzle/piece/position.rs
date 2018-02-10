@@ -11,12 +11,6 @@ pub struct Position<T> {
     base: T,
 }
 
-/// Move an entity to certain `Position`.
-pub trait Positionable<T> {
-    /// Determine the `Translation` which takes the entity to a `Position`.
-    fn to(&self, other: &Self) -> Translation<T>;
-}
-
 impl Position<(i8, i8, i8)> {
     /// Create  position at the given coordinates.
     pub fn new(x: i8, y: i8, z: i8) -> Position<(i8, i8, i8)> {
@@ -24,9 +18,37 @@ impl Position<(i8, i8, i8)> {
     }
 }
 
+/// Move an entity to certain `Position`.
+pub trait Positionable<T> {
+    /// Determine the `Translation` which takes the entity to a `Position`.
+    fn to(&self, other: &Self) -> Translation<T>;
+}
+
 impl<T> Positionable<T> for Position<T> where T: VectorDifference<T> {
     fn to(&self, other: &Self) -> Translation<T> {
         let translation: T = self.base.difference(&other.base);
+
+        Translation::from(translation)
+    }
+}
+
+/// Move an entity to a origin.
+pub trait Normalizable<T> {
+    /// Determine the `Translation` which takes the entity to standard reference `Position`.
+    fn to_reference(&self) -> Translation<T>;
+}
+
+impl Normalizable<(i8, i8, i8)> for Position<(i8, i8, i8)> {
+    fn to_reference(&self) -> Translation<(i8, i8, i8)> {
+        let translation = self.base.difference(&(0, 0, 0));
+
+        Translation::from(translation)
+    }
+}
+
+impl Normalizable<(i8, i8)> for Position<(i8, i8)> {
+    fn to_reference(&self) -> Translation<(i8, i8)> {
+        let translation = self.base.difference(&(0, 0));
 
         Translation::from(translation)
     }
