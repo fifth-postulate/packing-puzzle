@@ -6,18 +6,18 @@ use super::piece::Template;
 /// tuple of a `Template` and the rest of the `Bag`.
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct Bag {
-    collection: Vec<Template>,
+    collection: Vec<Template<(i8,i8,i8)>>,
 }
 
 impl Bag {
     /// Create a `Bag` from a collection of Templates
-    pub fn new(collection: Vec<Template>) -> Self {
+    pub fn new(collection: Vec<Template<(i8,i8,i8)>>) -> Self {
         Self { collection }
     }
 }
 
 impl IntoIterator for Bag {
-    type Item = (Template, Bag);
+    type Item = (Template<(i8,i8,i8)>, Bag);
     type IntoIter = BagSelectionIterator;
 
     fn into_iter(self) -> Self::IntoIter {
@@ -28,7 +28,7 @@ impl IntoIterator for Bag {
 
 /// Iterator over tuples of `Template`s and rest of `Bag`s.
 pub struct BagSelectionIterator {
-    collection: Vec<Template>,
+    collection: Vec<Template<(i8,i8,i8)>>,
     index: usize,
 }
 
@@ -39,11 +39,11 @@ impl BagSelectionIterator {
 }
 
 impl Iterator for BagSelectionIterator {
-    type Item = (Template, Bag);
+    type Item = (Template<(i8,i8,i8)>, Bag);
 
-    fn next(&mut self) -> Option<(Template, Bag)> {
+    fn next(&mut self) -> Option<(Template<(i8,i8,i8)>, Bag)> {
         if self.index < self.collection.len() {
-            let mut collection: Vec<Template> = self.collection.to_vec();
+            let mut collection: Vec<Template<(i8,i8,i8)>> = self.collection.to_vec();
             let template = collection.swap_remove(self.index);
             self.index += 1;
             Some((template.clone(), Bag::new(collection)))

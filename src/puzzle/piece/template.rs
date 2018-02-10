@@ -1,33 +1,34 @@
 //! template is a container to hold orientations of pieces.
 
 use std::convert::From;
+use super::super::vector::VectorAdd;
 use super::{Position, Normalizable, Piece, CubeSymmetryIterator, Translatable, Transformable, MinimumPosition};
 
 /// A `Template` is a container to hold a representation of a `Piece`. By
 /// Iterating over a one gets a piece in all the possible orientations.
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
-pub struct Template {
-    positions: Vec<Position<(i8, i8, i8)>>,
+pub struct Template<T> {
+    positions: Vec<Position<T>>,
     name: Option<String>
 }
 
-impl Template {
+impl<T> Template<T> {
     /// Create a `Template` from a vector of `Position`s.
-    pub fn new(positions: Vec<Position<(i8, i8, i8)>>) -> Template {
+    pub fn new(positions: Vec<Position<T>>) -> Template<T> {
         Template { positions, name: None }
     }
 
     /// Create a named `Template` from this `Template`
-    pub fn with_name<S>(self, name: S) -> Template where S : Into<String> {
+    pub fn with_name<S>(self, name: S) -> Template<T> where S : Into<String> {
         let name = Some(name.into());
 
         Template { positions: self.positions, name }
     }
 }
 
-impl IntoIterator for Template {
-    type Item = Piece<(i8, i8, i8)>;
-    type IntoIter = PieceIterator<(i8, i8, i8)>;
+impl<T> IntoIterator for Template<T> where T: Clone + PartialOrd + Ord + Transformable + Normalizable<T> + VectorAdd<T> {
+    type Item = Piece<T>;
+    type IntoIter = PieceIterator<T>;
 
     fn into_iter(self) -> Self::IntoIter {
         PieceIterator::new(self)
@@ -40,12 +41,12 @@ impl IntoIterator for Template {
 pub struct PieceIterator<T> {
     symmetry_iterator: CubeSymmetryIterator,
     seen_pieces: Vec<Piece<T>>,
-    template: Template,
+    template: Template<T>,
 }
 
 impl<T> PieceIterator<T> {
     /// Creates a `PieceIterator` for the `Template` that is passed as an argument
-    pub fn new(template: Template) -> PieceIterator<T> {
+    pub fn new(template: Template<T>) -> PieceIterator<T> {
         PieceIterator {
             symmetry_iterator: CubeSymmetryIterator::new(),
             seen_pieces: vec!(),
@@ -54,8 +55,8 @@ impl<T> PieceIterator<T> {
     }
 }
 
-impl Iterator for PieceIterator<(i8, i8, i8)> {
-    type Item = Piece<(i8, i8, i8)>;
+impl<T> Iterator for PieceIterator<T> where T: Clone + PartialEq + Eq + PartialOrd + Ord + Transformable + Normalizable<T> + VectorAdd<T> {
+    type Item = Piece<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let mut symmetry_option = self.symmetry_iterator.next();
@@ -87,8 +88,8 @@ impl Iterator for PieceIterator<(i8, i8, i8)> {
     }
 }
 
-impl From<Template> for Piece<(i8, i8, i8)> {
-    fn from(template: Template) -> Self {
+impl<T> From<Template<T>> for Piece<T> where T: Clone + PartialOrd + Ord + Transformable + Normalizable<T> + VectorAdd<T> {
+    fn from(template: Template<T>) -> Self {
         if template.name.is_some() {
             Piece::named(template.positions, template.name.unwrap())
         } else {
