@@ -1,7 +1,7 @@
 //! template is a container to hold orientations of pieces.
 
 use std::convert::From;
-use super::{Position, Positionable, Piece, CubeSymmetryIterator, Translatable, Transformable, MinimumPosition};
+use super::{Position, Normalizable, Piece, CubeSymmetryIterator, Translatable, Transformable, MinimumPosition};
 
 /// A `Template` is a container to hold a representation of a `Piece`. By
 /// Iterating over a one gets a piece in all the possible orientations.
@@ -27,7 +27,7 @@ impl Template {
 
 impl IntoIterator for Template {
     type Item = Piece<(i8, i8, i8)>;
-    type IntoIter = PieceIterator;
+    type IntoIter = PieceIterator<(i8, i8, i8)>;
 
     fn into_iter(self) -> Self::IntoIter {
         PieceIterator::new(self)
@@ -37,24 +37,24 @@ impl IntoIterator for Template {
 
 /// The `PieceIterator` will return `Piece`s  in all the orientations possible
 /// from a `Template`
-pub struct PieceIterator {
+pub struct PieceIterator<T> {
     symmetry_iterator: CubeSymmetryIterator,
-    seen_pieces: Vec<Piece<(i8, i8, i8)>>,
+    seen_pieces: Vec<Piece<T>>,
     template: Template,
 }
 
-impl PieceIterator {
+impl<T> PieceIterator<T> {
     /// Creates a `PieceIterator` for the `Template` that is passed as an argument
-    pub fn new(template: Template) -> PieceIterator {
+    pub fn new(template: Template) -> PieceIterator<T> {
         PieceIterator {
             symmetry_iterator: CubeSymmetryIterator::new(),
             seen_pieces: vec!(),
-            template: template
+            template,
         }
     }
 }
 
-impl Iterator for PieceIterator {
+impl Iterator for PieceIterator<(i8, i8, i8)> {
     type Item = Piece<(i8, i8, i8)>;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -65,7 +65,7 @@ impl Iterator for PieceIterator {
 
                 piece.transform(&symmetry);
                 let minimum_position = piece.minimum_position();
-                let translation = minimum_position.unwrap().to(&Position::new(0, 0, 0)); // TODO Position::zero
+                let translation = minimum_position.unwrap().to_reference();
                 piece.translate(&translation);
 
                 piece
@@ -127,7 +127,7 @@ mod tests {
             Position::new(1, 1, 2),
         ));
 
-        let iterator: PieceIterator = template.into_iter();
+        let iterator: PieceIterator<(i8, i8, i8)> = template.into_iter();
 
         assert_eq!(iterator.count(), 24);
     }
@@ -141,7 +141,7 @@ mod tests {
             Position::new(1, 1, 0),
         ));
 
-        let iterator: PieceIterator = template.into_iter();
+        let iterator: PieceIterator<(i8, i8, i8)>= template.into_iter();
 
         assert_eq!(iterator.count(), 3);
     }

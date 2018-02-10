@@ -38,17 +38,23 @@ pub trait Normalizable<T> {
     fn to_reference(&self) -> Translation<T>;
 }
 
-impl Normalizable<(i8, i8, i8)> for Position<(i8, i8, i8)> {
+impl<T> Normalizable<T> for Position<T> where T: Normalizable<T> {
+    fn to_reference(&self) -> Translation<T> {
+        self.base.to_reference()
+    }
+}
+
+impl Normalizable<(i8, i8, i8)> for (i8, i8, i8) {
     fn to_reference(&self) -> Translation<(i8, i8, i8)> {
-        let translation = self.base.difference(&(0, 0, 0));
+        let translation = (-self.0, -self.1, -self.2);
 
         Translation::from(translation)
     }
 }
 
-impl Normalizable<(i8, i8)> for Position<(i8, i8)> {
+impl Normalizable<(i8, i8)> for (i8, i8) {
     fn to_reference(&self) -> Translation<(i8, i8)> {
-        let translation = self.base.difference(&(0, 0));
+        let translation = (-self.0, -self.1);
 
         Translation::from(translation)
     }

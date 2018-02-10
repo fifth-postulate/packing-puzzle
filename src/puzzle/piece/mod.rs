@@ -10,6 +10,6 @@ mod template;
 
 pub use self::symmetry::{Transformable, CubeSymmetry, CubeSymmetryIterator};
 pub use self::translation::{Translatable, Translation};
-pub use self::position::{Position, Positionable, MinimumPosition};
+pub use self::position::{Position, Positionable, Normalizable, MinimumPosition};
 pub use self::entity::{Piece};
 pub use self::template::Template;
