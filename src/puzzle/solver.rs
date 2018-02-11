@@ -6,13 +6,13 @@ use super::pieces::Bag;
 
 /// Region to be packed.
 #[derive(Debug, PartialEq, Eq, Hash)]
-pub struct Target {
-    collection: Vec<Position<(i8, i8, i8)>>,
+pub struct Target<T> {
+    collection: Vec<Position<T>>,
 }
 
-impl Target {
+impl<T> Target<T> where T: PartialOrd + Ord + PartialEq + Eq + Clone {
     /// Create a new `Target` from a collection of `Position`s.
-    pub fn new(collection: Vec<Position<(i8, i8, i8)>>) -> Target {
+    pub fn new(collection: Vec<Position<T>>) -> Target<T> {
         Target { collection }
     }
 
@@ -22,14 +22,14 @@ impl Target {
     }
 
     /// Determine if a `Piece` can be placed in the `Target`.
-    pub fn fits(&self, piece: &Piece<(i8, i8, i8)>) -> bool {
+    pub fn fits(&self, piece: &Piece<T>) -> bool {
         piece.iter().all(|position| self.collection.contains(&position))
     }
 
     /// Place a `Piece` in the `Target`. *Note* caller is responsible to check
     /// if the `Piece` will actually fit.
-    pub fn place(&self, piece: &Piece<(i8, i8, i8)>) -> Target {
-        let collection: Vec<Position<(i8, i8, i8)>> = self.collection
+    pub fn place(&self, piece: &Piece<T>) -> Target<T> {
+        let collection: Vec<Position<T>> = self.collection
             .iter()
             .filter(|position| !piece.contains(position))
             .cloned()
@@ -39,8 +39,8 @@ impl Target {
     }
 }
 
-impl MinimumPosition<(i8, i8, i8)> for Target {
-    fn minimum_position(&self) -> Option<Position<(i8, i8, i8)>> {
+impl<T> MinimumPosition<T> for Target<T> where T: PartialOrd + Ord + Clone {
+    fn minimum_position(&self) -> Option<Position<T>> {
         self.collection.iter().min().cloned()
     }
 }
@@ -81,14 +81,14 @@ impl Display for Solution {
 
 /// Attempt to pack all the `Piece`s in the `Bag` into the `Target` region. When
 /// a solution is found, the `when_solved` callback is called with that solution.
-pub fn solve<F>(target: &Target, bag: Bag<(i8, i8, i8)>, when_solved: &mut F) where F: (FnMut(Solution)) + Sized {
+pub fn solve<F>(target: &Target<(i8, i8, i8)>, bag: Bag<(i8, i8, i8)>, when_solved: &mut F) where F: (FnMut(Solution)) + Sized {
     let partial_solution = Solution::empty();
     solve_with(target, bag, partial_solution, when_solved)
 }
 
 
 /// Variant of the `solve` method that allows for a different starting point.
-pub fn solve_with<F>(target: &Target, bag: Bag<(i8, i8, i8)>, partial_solution: Solution, when_solved: &mut F) where F: (FnMut(Solution)) + Sized {
+pub fn solve_with<F>(target: &Target<(i8, i8, i8)>, bag: Bag<(i8, i8, i8)>, partial_solution: Solution, when_solved: &mut F) where F: (FnMut(Solution)) + Sized {
     if target.is_packed() {
         when_solved(partial_solution)
     } else {

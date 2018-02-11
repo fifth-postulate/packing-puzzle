@@ -4,7 +4,7 @@ use super::super::puzzle::solver::Target;
 use super::super::puzzle::piece::Position;
 
 /// Create a brick `Target`, defined by the dimensions.
-pub fn brick(width: u8, height: u8, depth: u8) -> Target {
+pub fn brick(width: u8, height: u8, depth: u8) -> Target<(i8, i8, i8)> {
     let mut positions: Vec<Position<(i8, i8, i8)>> = vec!();
     for x in 0..width {
         for y in 0..height {
