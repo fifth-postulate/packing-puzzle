@@ -1,7 +1,8 @@
 //! Solver for packing problems.
 use std::fmt::{Display, Formatter, Error};
 
-use super::piece::{MinimumPosition, Position, Positionable, Translatable, Piece};
+use super::vector::{VectorAdd, VectorDifference};
+use super::piece::{MinimumPosition, Position, Positionable, Translatable, Transformable, Normalizable, Piece};
 use super::pieces::Bag;
 
 /// Region to be packed.
@@ -47,13 +48,13 @@ impl<T> MinimumPosition<T> for Target<T> where T: PartialOrd + Ord + Clone {
 
 /// (Partial) solution of a packing problem. Piece at their correct location are listed.
 #[derive(Debug)]
-pub struct Solution {
-    pieces: Vec<Piece<(i8, i8, i8)>>
+pub struct Solution<T> {
+    pieces: Vec<Piece<T>>
 }
 
-impl Solution {
+impl<T> Solution<T> where T : Clone {
     /// Empty solution. Serves as a starting point for the `solve` method.
-    pub fn empty() -> Solution {
+    pub fn empty() -> Solution<T> {
         Solution { pieces: vec!() }
     }
 
@@ -61,15 +62,15 @@ impl Solution {
     ///
     /// Returns a new `Solutions` with the `Piece` added. *Note* the caller is
     /// responsible for checking if the `Piece` actually fits in the `Target`.
-    pub fn record(&self, piece: &Piece<(i8, i8, i8)>) -> Solution {
-        let mut pieces: Vec<Piece<(i8, i8, i8)>> = self.pieces.to_vec();
+    pub fn record(&self, piece: &Piece<T>) -> Solution<T> {
+        let mut pieces: Vec<Piece<T>> = self.pieces.to_vec();
         pieces.push(piece.clone());
 
         Solution { pieces }
     }
 }
 
-impl Display for Solution {
+impl Display for Solution<(i8, i8, i8)> {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         write!(f, "<")?;
         for piece in &self.pieces {
@@ -79,16 +80,27 @@ impl Display for Solution {
     }
 }
 
+impl Display for Solution<(i8, i8)> {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        write!(f, "<")?;
+        for piece in &self.pieces {
+            write!(f, "{}", piece)?;
+        }
+        write!(f, ">")
+    }
+}
+
+
 /// Attempt to pack all the `Piece`s in the `Bag` into the `Target` region. When
 /// a solution is found, the `when_solved` callback is called with that solution.
-pub fn solve<F>(target: &Target<(i8, i8, i8)>, bag: Bag<(i8, i8, i8)>, when_solved: &mut F) where F: (FnMut(Solution)) + Sized {
-    let partial_solution = Solution::empty();
+pub fn solve<F, T>(target: &Target<T>, bag: Bag<T>, when_solved: &mut F) where F: (FnMut(Solution<T>)) + Sized, T: Clone + PartialOrd + Ord + Transformable + Normalizable<T> + VectorDifference<T> + VectorAdd<T> {
+    let partial_solution: Solution<T> = Solution::empty();
     solve_with(target, bag, partial_solution, when_solved)
 }
 
 
 /// Variant of the `solve` method that allows for a different starting point.
-pub fn solve_with<F>(target: &Target<(i8, i8, i8)>, bag: Bag<(i8, i8, i8)>, partial_solution: Solution, when_solved: &mut F) where F: (FnMut(Solution)) + Sized {
+pub fn solve_with<F, T>(target: &Target<T>, bag: Bag<T>, partial_solution: Solution<T>, when_solved: &mut F) where F: (FnMut(Solution<T>)) + Sized, T: Clone + PartialOrd + Ord + Transformable + Normalizable<T> + VectorDifference<T> + VectorAdd<T> {
     if target.is_packed() {
         when_solved(partial_solution)
     } else {
@@ -166,7 +178,7 @@ mod tests {
             )),
         ));
 
-        let mut solutions: Vec<Solution> = vec!();
+        let mut solutions: Vec<Solution<(i8, i8, i8)>> = vec!();
         solve(&target, bag, &mut |solution|{ solutions.push(solution)});
         assert_eq!(solutions.len(), 8);
     }

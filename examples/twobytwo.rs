@@ -23,7 +23,7 @@ fn main() {
         )),
     ));
 
-    let mut solutions: Vec<Solution> = vec!();
+    let mut solutions: Vec<Solution<(i8, i8, i8)>> = vec!();
     solve(&target, bag, &mut |solution|{
         println!("{}", solution);
         solutions.push(solution);
