@@ -18,6 +18,14 @@ impl Position<(i8, i8, i8)> {
     }
 }
 
+impl Position<(i8, i8)> {
+    /// Create  position at the given coordinates.
+    pub fn d2(x: i8, y: i8) -> Position<(i8, i8)> {
+        Position { base: (x, y) }
+    }
+}
+
+
 /// Move an entity to certain `Position`.
 pub trait Positionable<T> {
     /// Determine the `Translation` which takes the entity to a `Position`.
