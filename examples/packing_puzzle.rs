@@ -14,7 +14,7 @@ fn main() {
     });
 }
 
-pub fn packing_puzzle() -> Bag {
+pub fn packing_puzzle() -> Bag<(i8, i8, i8)> {
     Bag::new(vec!(
         Template::new(vec!(
             Position::new(0, 0, 0),

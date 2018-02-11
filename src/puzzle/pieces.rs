@@ -5,20 +5,20 @@ use super::piece::Template;
 /// A container for `Template`s. Iterating over a `Bag` provides access to a
 /// tuple of a `Template` and the rest of the `Bag`.
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
-pub struct Bag {
-    collection: Vec<Template<(i8,i8,i8)>>,
+pub struct Bag<T> {
+    collection: Vec<Template<T>>,
 }
 
-impl Bag {
+impl<T> Bag<T> {
     /// Create a `Bag` from a collection of Templates
-    pub fn new(collection: Vec<Template<(i8,i8,i8)>>) -> Self {
+    pub fn new(collection: Vec<Template<T>>) -> Self {
         Self { collection }
     }
 }
 
-impl IntoIterator for Bag {
-    type Item = (Template<(i8,i8,i8)>, Bag);
-    type IntoIter = BagSelectionIterator;
+impl<T> IntoIterator for Bag<T> where T: Clone {
+    type Item = (Template<T>, Bag<T>);
+    type IntoIter = BagSelectionIterator<T>;
 
     fn into_iter(self) -> Self::IntoIter {
         BagSelectionIterator::new(self)
@@ -27,23 +27,23 @@ impl IntoIterator for Bag {
 
 
 /// Iterator over tuples of `Template`s and rest of `Bag`s.
-pub struct BagSelectionIterator {
-    collection: Vec<Template<(i8,i8,i8)>>,
+pub struct BagSelectionIterator<T> {
+    collection: Vec<Template<T>>,
     index: usize,
 }
 
-impl BagSelectionIterator {
-    fn new(bag: Bag) -> BagSelectionIterator {
+impl<T> BagSelectionIterator<T> {
+    fn new(bag: Bag<T>) -> BagSelectionIterator<T> {
         BagSelectionIterator { index: 0, collection: bag.collection }
     }
 }
 
-impl Iterator for BagSelectionIterator {
-    type Item = (Template<(i8,i8,i8)>, Bag);
+impl<T> Iterator for BagSelectionIterator<T> where T: Clone {
+    type Item = (Template<T>, Bag<T>);
 
-    fn next(&mut self) -> Option<(Template<(i8,i8,i8)>, Bag)> {
+    fn next(&mut self) -> Option<(Template<T>, Bag<T>)> {
         if self.index < self.collection.len() {
-            let mut collection: Vec<Template<(i8,i8,i8)>> = self.collection.to_vec();
+            let mut collection: Vec<Template<T>> = self.collection.to_vec();
             let template = collection.swap_remove(self.index);
             self.index += 1;
             Some((template.clone(), Bag::new(collection)))

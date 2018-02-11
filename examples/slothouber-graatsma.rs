@@ -14,7 +14,7 @@ fn main(){
     });
 }
 
-fn slothouber_graatsma_bag() -> Bag {
+fn slothouber_graatsma_bag() -> Bag<(i8, i8, i8)> {
     Bag::new(vec!(
         Template::new(vec!(
             Position::new(0, 0, 0),

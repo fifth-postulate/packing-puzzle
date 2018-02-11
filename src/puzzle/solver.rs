@@ -81,14 +81,14 @@ impl Display for Solution {
 
 /// Attempt to pack all the `Piece`s in the `Bag` into the `Target` region. When
 /// a solution is found, the `when_solved` callback is called with that solution.
-pub fn solve<F>(target: &Target, bag: Bag, when_solved: &mut F) where F: (FnMut(Solution)) + Sized {
+pub fn solve<F>(target: &Target, bag: Bag<(i8, i8, i8)>, when_solved: &mut F) where F: (FnMut(Solution)) + Sized {
     let partial_solution = Solution::empty();
     solve_with(target, bag, partial_solution, when_solved)
 }
 
 
 /// Variant of the `solve` method that allows for a different starting point.
-pub fn solve_with<F>(target: &Target, bag: Bag, partial_solution: Solution, when_solved: &mut F) where F: (FnMut(Solution)) + Sized {
+pub fn solve_with<F>(target: &Target, bag: Bag<(i8, i8, i8)>, partial_solution: Solution, when_solved: &mut F) where F: (FnMut(Solution)) + Sized {
     if target.is_packed() {
         when_solved(partial_solution)
     } else {
