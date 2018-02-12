@@ -1,6 +1,6 @@
 [package]
 name = "pack"
-version = "0.3.0"
+version = "0.4.0"
 authors = ["Daan van Berkel <daan.v.berkel.1980@gmail.com>"]
 description = "Solver for packing puzzle."
 license = "MIT"
