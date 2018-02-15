@@ -1,4 +1,14 @@
 [[package]]
+name = "dlx"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
 name = "pack"
 version = "0.4.0"
+dependencies = [
+ "dlx 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
 
+[metadata]
+"checksum dlx 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "d35932729557621ee070e0528f58ff36dfd7f5a2c8341a94ba153464c321ff2c"
