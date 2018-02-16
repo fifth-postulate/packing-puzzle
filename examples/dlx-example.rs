@@ -52,7 +52,11 @@ impl DominoesSolutions {
 
 /// When a solution is found, we want to be notified.
 impl Solutions for DominoesSolutions {
-    fn push(&mut self, _: Solution) -> bool {
+    fn push(&mut self, solution: Solution) -> bool {
+        println!("----------");
+        for row in solution {
+            println!("{:?}", row);
+        }
         self.count += 1;
         true
     }
