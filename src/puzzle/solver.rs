@@ -164,23 +164,17 @@ mod tests {
         ));
 
         let bag = Bag::new(vec!(
-            Template::new(vec!(
+            (2,Template::new(vec!(
                 Position::new(0, 0, 0),
                 Position::new(1, 0, 0),
                 Position::new(0, 1, 0),
                 Position::new(0, 0, 1),
-            )),
-            Template::new(vec!(
-                Position::new(0, 0, 0),
-                Position::new(1, 0, 0),
-                Position::new(0, 1, 0),
-                Position::new(0, 0, 1),
-            )),
+            ))),
         ));
 
         let mut solutions: Vec<Solution<(i8, i8, i8)>> = vec!();
         solve(&target, bag, &mut |solution|{ solutions.push(solution)});
-        assert_eq!(solutions.len(), 8);
+        assert_eq!(solutions.len(), 4);
     }
 
     #[test]

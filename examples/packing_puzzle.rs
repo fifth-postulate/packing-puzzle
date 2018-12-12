@@ -16,97 +16,97 @@ fn main() {
 
 pub fn packing_puzzle() -> Bag<(i8, i8, i8)> {
     Bag::new(vec!(
-        Template::new(vec!(
+        (1,Template::new(vec!(
             Position::new(0, 0, 0),
             Position::new(1, 0, 0),
             Position::new(1, 1, 0),
             Position::new(1, 1, 1),
-        )),
-        Template::new(vec!(
+        ))),
+        (1,Template::new(vec!(
             Position::new(0, 0, 0),
             Position::new(1, 0, 0),
             Position::new(2, 0, 0),
             Position::new(1, 1, 0),
             Position::new(1, 0, 1),
-        )),
-        Template::new(vec!(
+        ))),
+        (1,Template::new(vec!(
             Position::new(0, 0, 0),
             Position::new(1, 0, 0),
             Position::new(2, 0, 0),
             Position::new(2, 1, 0),
             Position::new(0, 0, 1),
-        )),
-        Template::new(vec!(
+        ))),
+        (1,Template::new(vec!(
             Position::new(0, 0, 0),
             Position::new(1, 0, 0),
             Position::new(1, 1, 0),
             Position::new(0, 0, 1),
             Position::new(0, 0, 2),
-        )),
-        Template::new(vec!(
+        ))),
+        (1,Template::new(vec!(
             Position::new(0, 0, 0),
             Position::new(1, 0, 0),
             Position::new(1, 1, 0),
             Position::new(2, 1, 0),
             Position::new(2, 2, 0),
-        )),
+        ))),
 
-        Template::new(vec!(
+        (1,Template::new(vec!(
             Position::new(0, 0, 0),
             Position::new(1, 0, 0),
             Position::new(1, 1, 0),
             Position::new(1, 2, 0),
             Position::new(2, 1, 0),
-        )),
-        Template::new(vec!(
+        ))),
+        (1,Template::new(vec!(
             Position::new(0, 0, 0),
             Position::new(1, 0, 0),
             Position::new(2, 0, 0),
             Position::new(1, 1, 0),
             Position::new(1, 1, 1),
-        )),
-        Template::new(vec!(
+        ))),
+        (1,Template::new(vec!(
             Position::new(0, 0, 0),
             Position::new(1, 0, 0),
             Position::new(1, 1, 0),
             Position::new(1, 1, 1),
             Position::new(2, 1, 1),
-        )),
-        Template::new(vec!(
+        ))),
+        (1,Template::new(vec!(
             Position::new(0, 0, 0),
             Position::new(1, 0, 0),
             Position::new(2, 0, 0),
             Position::new(2, 1, 0),
             Position::new(1, 0, 1),
-        )),
+        ))),
 
-        Template::new(vec!(
+        (1,Template::new(vec!(
             Position::new(1, 0, 0),
             Position::new(0, 1, 0),
             Position::new(1, 1, 0),
             Position::new(2, 1, 0),
             Position::new(1, 2, 0),
-        )),
-        Template::new(vec!(
+        ))),
+        (1,Template::new(vec!(
             Position::new(0, 0, 0),
             Position::new(1, 0, 0),
             Position::new(1, 1, 0),
             Position::new(2, 1, 0),
             Position::new(0, 0, 1),
-        )),
-        Template::new(vec!(
+        ))),
+        (1,Template::new(vec!(
             Position::new(0, 0, 0),
             Position::new(1, 0, 0),
             Position::new(1, 1, 0),
             Position::new(2, 1, 0),
             Position::new(1, 1, 1),
-        )),
-        Template::new(vec!(
+        ))),
+        (1,Template::new(vec!(
             Position::new(0, 0, 0),
             Position::new(1, 0, 0),
             Position::new(2, 0, 0),
             Position::new(0, 1, 0),
             Position::new(0, 0, 1),
-        )),
+        ))),
     ))
 }

@@ -78,52 +78,16 @@ Templates are created by providing the vector of positions they occupy.
 ```rust
 fn slothouber_graatsma_bag() -> Bag {
     Bag::new(vec!(
-        Template::new(vec!(
+        (6,Template::new(vec!(
             Position::new(0, 0, 0),
             Position::new(1, 0, 0),
             Position::new(0, 1, 0),
             Position::new(1, 1, 0),
-        )),
-        Template::new(vec!(
-            Position::new(0, 0, 0),
-            Position::new(1, 0, 0),
-            Position::new(0, 1, 0),
-            Position::new(1, 1, 0),
-        )),
-        Template::new(vec!(
-            Position::new(0, 0, 0),
-            Position::new(1, 0, 0),
-            Position::new(0, 1, 0),
-            Position::new(1, 1, 0),
-        )),
-        Template::new(vec!(
-            Position::new(0, 0, 0),
-            Position::new(1, 0, 0),
-            Position::new(0, 1, 0),
-            Position::new(1, 1, 0),
-        )),
-        Template::new(vec!(
-            Position::new(0, 0, 0),
-            Position::new(1, 0, 0),
-            Position::new(0, 1, 0),
-            Position::new(1, 1, 0),
-        )),
-        Template::new(vec!(
-            Position::new(0, 0, 0),
-            Position::new(1, 0, 0),
-            Position::new(0, 1, 0),
-            Position::new(1, 1, 0),
-        )),
+        ))),
 
-        Template::new(vec!(
+        (3,Template::new(vec!(
             Position::new(0, 0, 0),
-        )),
-        Template::new(vec!(
-            Position::new(0, 0, 0),
-        )),
-        Template::new(vec!(
-            Position::new(0, 0, 0),
-        )),
+        ))),
     ))
 }
 ```

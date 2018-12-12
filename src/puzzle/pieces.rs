@@ -6,12 +6,12 @@ use super::piece::Template;
 /// tuple of a `Template` and the rest of the `Bag`.
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct Bag<T> {
-    collection: Vec<Template<T>>,
+    collection: Vec<(u8, Template<T>)>,
 }
 
 impl<T> Bag<T> {
     /// Create a `Bag` from a collection of Templates
-    pub fn new(collection: Vec<Template<T>>) -> Self {
+    pub fn new(collection: Vec<(u8, Template<T>)>) -> Self {
         Self { collection }
     }
 }
@@ -28,7 +28,7 @@ impl<T> IntoIterator for Bag<T> where T: Clone {
 
 /// Iterator over tuples of `Template`s and rest of `Bag`s.
 pub struct BagSelectionIterator<T> {
-    collection: Vec<Template<T>>,
+    collection: Vec<(u8, Template<T>)>,
     index: usize,
 }
 
@@ -43,10 +43,17 @@ impl<T> Iterator for BagSelectionIterator<T> where T: Clone {
 
     fn next(&mut self) -> Option<(Template<T>, Bag<T>)> {
         if self.index < self.collection.len() {
-            let mut collection: Vec<Template<T>> = self.collection.to_vec();
-            let template = collection.swap_remove(self.index);
+            let mut collection: Vec<(u8, Template<T>)> = self.collection.to_vec();
+            let template;
+            if collection[self.index].0 > 1 {
+                template = collection[self.index].1.clone();
+                collection[self.index].0 -= 1;
+            } else {
+                let pair = collection.swap_remove(self.index);
+                template = pair.1.clone();
+            }
             self.index += 1;
-            Some((template.clone(), Bag::new(collection)))
+            Some((template, Bag::new(collection)))
         } else {
             None
         }
@@ -61,8 +68,8 @@ mod tests {
     #[test]
     fn bag_should_iterate_over_collection() {
         let bag = Bag::new(vec!(
-            Template::new(vec!(Position::new(0, 0, 0), Position::new(1, 0, 0))),
-            Template::new(vec!(Position::new(0, 0, 0))),
+            (1, Template::new(vec!(Position::new(0, 0, 0), Position::new(1, 0, 0)))),
+            (1, Template::new(vec!(Position::new(0, 0, 0)))),
         ));
 
         let mut iterator = bag.into_iter();
@@ -70,16 +77,16 @@ mod tests {
         assert!(candidate.is_some());
         let (template, rest) = candidate.unwrap();
         assert_eq!(template, Template::new(vec!(Position::new(0, 0, 0), Position::new(1, 0, 0))));
-        assert_eq!(rest, Bag::new(vec!(Template::new(vec!(Position::new(0, 0, 0))))));
+        assert_eq!(rest, Bag::new(vec!((1,Template::new(vec!(Position::new(0, 0, 0)))))));
 
         let candidate = iterator.next();
         assert!(candidate.is_some());
         let (template, rest) = candidate.unwrap();
         assert_eq!(template, Template::new(vec!(Position::new(0, 0, 0))));
         assert_eq!(rest, Bag::new(vec!(
-            Template::new(vec!(
+            (1,Template::new(vec!(
                 Position::new(0, 0, 0),
-                Position::new(1, 0, 0))))));
+                Position::new(1, 0, 0)))))));
 
     }
 }
