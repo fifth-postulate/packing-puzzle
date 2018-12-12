@@ -14,13 +14,13 @@ fn main() {
             Position::new(1, 0, 0),
             Position::new(0, 1, 0),
             Position::new(0, 0, 1),
-        )),
+        )).with_name("A"),
         Template::new(vec!(
             Position::new(0, 0, 0),
             Position::new(1, 0, 0),
             Position::new(0, 1, 0),
             Position::new(0, 0, 1),
-        )),
+        )).with_name("B"),
     ));
 
     let mut solutions: Vec<Solution<(i8, i8, i8)>> = vec!();
