@@ -9,6 +9,7 @@ homepage = "https://github.com/fifth-postulate/packing-puzzle/wiki"
 repository = "https://github.com/fifth-postulate/packing-puzzle"
 keywords = ["puzzle", "solver", "packing"]
 categories = ["algorithms", "science"]
+edition = "2018"
 
 [badges]
 travis-ci = { repository = "fifth-postulate/packing-puzzle", branch = "master" }
